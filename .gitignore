@@ -1,0 +1,19 @@
+# .NET 
+**/bin/
+**/obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Angular 
+**/node_modules/
+**/dist/
+**/.angular/
+**/.env
+
+# General
+.env
+.DS_Store
+Thumbs.db
+
