@@ -1,8 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.Runtime.InteropServices;
-using ToDo.Application.Commands;
 using ToDo.Application.DTOs;
+using ToDo.Application.Commands;
 using ToDo.Application.Queries;
 
 namespace ToDo.Application.Endpoints
@@ -26,8 +25,8 @@ namespace ToDo.Application.Endpoints
             return Ok(result);
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<ToDoDto>> GetById(int id)
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult<ToDoDto>> GetById(Guid id)
         {
             try
             {
@@ -42,22 +41,22 @@ namespace ToDo.Application.Endpoints
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> CreateToDo([FromBody] CreateToDoCommand command)
+        public async Task<ActionResult<Guid>> CreateToDo([FromBody] CreateToDoCommand command)
         {
             var id = await _mediator.Send(command);
             return Ok(id);
         }
 
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateToDo(int id, [FromBody] UpdateToDoCommand command)
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> UpdateToDo(Guid id, [FromBody] UpdateToDoCommand command)
         {
             command.Id = id;
             await _mediator.Send(command);
             return NoContent();
         }
 
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteToDo(int id)
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> DeleteToDo(Guid id)
         {
             var command = new DeleteToDoCommand { Id = id };
             await _mediator.Send(command);

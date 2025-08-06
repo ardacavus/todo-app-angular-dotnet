@@ -2,9 +2,9 @@
 using ToDo.Application.Commands;
 using ToDo.Application.Repositories;
 
-namespace ToDo.Application.Handlers
+namespace ToDo.Application.CommandHandlers
 {
-    public class CreateToDoCommandHandler : IRequestHandler<CreateToDoCommand, int>
+    public class CreateToDoCommandHandler : IRequestHandler<CreateToDoCommand, Guid>
     {
         private readonly IToDoRepository _repository;
 
@@ -13,10 +13,11 @@ namespace ToDo.Application.Handlers
             _repository = repository;
         }
 
-        public async Task<int> Handle(CreateToDoCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateToDoCommand request, CancellationToken cancellationToken)
         {
             var toDo = new ToDo.Domain.Entities.ToDo
             {
+                Id = Guid.NewGuid(),
                 Title = request.Title,
                 Description = request.Description,
                 IsCompleted = request.IsCompleted,

@@ -12,8 +12,8 @@ using ToDo.Persistence.Contexts;
 namespace ToDo.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250805191901_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250806063822_InitialCreateWithGuid")]
+    partial class InitialCreateWithGuid
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,11 +27,9 @@ namespace ToDo.Persistence.Migrations
 
             modelBuilder.Entity("ToDo.Domain.Entities.ToDo", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");

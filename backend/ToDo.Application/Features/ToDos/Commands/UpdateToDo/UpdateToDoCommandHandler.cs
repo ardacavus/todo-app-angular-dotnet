@@ -2,7 +2,7 @@
 using ToDo.Application.Commands;
 using ToDo.Application.Repositories;
 
-namespace ToDo.Application.Handlers
+namespace ToDo.Application.CommandHandlers
 {
     public class UpdateToDoCommandHandler : IRequestHandler<UpdateToDoCommand, Unit>
     {
@@ -22,7 +22,6 @@ namespace ToDo.Application.Handlers
                 throw new KeyNotFoundException($"ToDo with ID {request.Id} not found.");
             }
 
-            // Gelen alanlarla mevcut ToDo'yu güncelle
             toDo.Title = request.Title;
             toDo.Description = request.Description;
             toDo.IsCompleted = request.IsCompleted;

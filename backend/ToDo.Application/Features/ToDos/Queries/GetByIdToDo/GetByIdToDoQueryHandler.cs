@@ -3,7 +3,7 @@ using ToDo.Application.DTOs;
 using ToDo.Application.Queries;
 using ToDo.Application.Repositories;
 
-namespace ToDo.Application.Handlers
+namespace ToDo.Application.QueryHandlers
 {
     public class GetByIdToDoQueryHandler : IRequestHandler<GetByIdToDoQuery, ToDoDto>
     {

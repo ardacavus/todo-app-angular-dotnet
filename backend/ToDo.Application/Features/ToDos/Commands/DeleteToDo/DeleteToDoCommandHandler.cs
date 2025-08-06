@@ -2,7 +2,7 @@
 using ToDo.Application.Commands;
 using ToDo.Application.Repositories;
 
-namespace ToDo.Application.Handlers
+namespace ToDo.Application.CommandHandlers
 {
     public class DeleteToDoCommandHandler : IRequestHandler<DeleteToDoCommand, Unit>
     {

@@ -18,7 +18,7 @@ namespace ToDo.Persistence.Repositories
             return await _context.ToDos.ToListAsync();
         }
 
-        public async Task<ToDo.Domain.Entities.ToDo?> GetByIdAsync(int id)
+        public async Task<ToDo.Domain.Entities.ToDo?> GetByIdAsync(Guid id)
         {
             return await _context.ToDos.FindAsync(id);
         }

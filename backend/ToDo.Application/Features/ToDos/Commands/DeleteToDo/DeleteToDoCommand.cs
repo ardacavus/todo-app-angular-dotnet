@@ -4,6 +4,6 @@ namespace ToDo.Application.Commands
 {
     public class DeleteToDoCommand : IRequest<Unit>
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
     }
 }

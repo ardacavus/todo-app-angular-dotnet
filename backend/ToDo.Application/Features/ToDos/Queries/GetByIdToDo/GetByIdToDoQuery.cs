@@ -3,5 +3,5 @@ using ToDo.Application.DTOs;
 
 namespace ToDo.Application.Queries
 {
-    public record GetByIdToDoQuery(int Id) : IRequest<ToDoDto>;
+    public record GetByIdToDoQuery(Guid Id) : IRequest<ToDoDto>;
 }
