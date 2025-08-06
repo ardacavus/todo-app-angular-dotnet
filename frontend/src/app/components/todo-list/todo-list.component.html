@@ -1,0 +1,67 @@
+<div class="todo-container">
+  <div *ngIf="error" class="error-message">
+    ❌ {{ error }}
+  </div>
+
+  <div class="add-todo-form">
+    <h3>✏️ Yeni Görev Ekle</h3>
+    <div class="form-group">
+      <input 
+        type="text" 
+        placeholder="Başlık*" 
+        [(ngModel)]="newTodo.title"
+        class="form-input"
+        (keyup.enter)="addTodo()">
+    </div>
+    <div class="form-group">
+      <textarea 
+        placeholder="Açıklama (opsiyonel)" 
+        [(ngModel)]="newTodo.description"
+        class="form-textarea"
+        rows="3"></textarea>
+    </div>
+    <button 
+      (click)="addTodo()" 
+      class="add-button"
+      [disabled]="!newTodo.title.trim()">
+      ➕ Görev Ekle
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    ⏳ Yükleniyor...
+  </div>
+
+  <div *ngIf="!loading" class="todo-list">
+    <h3>📋 Görevlerim ({{ todos.length }})</h3>
+    
+    <div *ngIf="todos.length === 0" class="no-todos">
+      🎉 Henüz görev yok! Yukarıdan yeni görev ekle.
+    </div>
+
+    <div *ngFor="let todo of todos" class="todo-item" [class.completed]="todo.isCompleted">
+      <div class="todo-content">
+        <div class="todo-header">
+          <input 
+            type="checkbox" 
+            [checked]="todo.isCompleted"
+            (change)="toggleComplete(todo)"
+            class="todo-checkbox">
+          <h4 class="todo-title">{{ todo.title }}</h4>
+          <button 
+            (click)="deleteTodo(todo.id)" 
+            class="delete-button"
+            title="Sil">
+            🗑️
+          </button>
+        </div>
+        <p *ngIf="todo.description" class="todo-description">
+          {{ todo.description }}
+        </p>
+        <small class="todo-date">
+          📅 {{ todo.createdAt | date:'dd/MM/yyyy HH:mm' }}
+        </small>
+      </div>
+    </div>
+  </div>
+</div>
