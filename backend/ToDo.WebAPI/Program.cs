@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// DI
+// Dependency Injection
 builder.Services.AddScoped<IToDoRepository, ToDoRepository>();
 builder.Services.AddScoped<ICreateToDoHandler, CreateToDoHandler>();
 builder.Services.AddScoped<IUpdateToDoHandler, UpdateToDoHandler>();
@@ -24,13 +24,25 @@ builder.Services.AddScoped<IGetToDoByIdHandler, GetToDoByIdHandler>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// CORS ekle
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+        policy.WithOrigins("http://localhost:4200") // Angular dev server adresi
+              .AllowAnyHeader()
+              .AllowAnyMethod());
+});
+
 var app = builder.Build();
 
-// Swagger middleware – koþulsuz
+// Swagger middleware
 app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+
+// CORS aktif et
+app.UseCors("AllowFrontend");
 
 // Minimal API endpoint grubu
 var api = app.MapGroup("/api/todo");

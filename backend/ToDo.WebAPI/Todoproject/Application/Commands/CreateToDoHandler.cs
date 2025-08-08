@@ -15,18 +15,26 @@ namespace ToDo.WebAPI.Todoproject.Application.Commands
 
         public async Task<ToDoDto> HandleAsync(CreateToDoRequest req, CancellationToken ct)
         {
-            var e = new Entities.Entity.Todo
+            if (string.IsNullOrWhiteSpace(req.Title))
+                throw new ArgumentException("Title is required.", nameof(req.Title));
+
+            var entity = new Entities.Entity.Todo
             {
-                Id = Guid.NewGuid(),
-                Title = req.Title,
-                Description = req.Description,
+                Title = req.Title.Trim(),
+                Description = string.IsNullOrWhiteSpace(req.Description) ? null : req.Description!.Trim(),
                 IsCompleted = req.IsCompleted
             };
 
-            await _repo.AddAsync(e, ct);
+            await _repo.AddAsync(entity, ct);
             await _repo.SaveChangesAsync(ct);
 
-            return new ToDoDto(e.Id, e.Title, e.Description, e.IsCompleted, e.CreatedAt);
+            return new ToDoDto(
+                entity.Id,
+                entity.Title,
+                entity.Description,
+                entity.IsCompleted,
+                entity.CreatedAt
+            );
         }
     }
 }

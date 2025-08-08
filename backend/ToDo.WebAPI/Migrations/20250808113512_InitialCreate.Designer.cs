@@ -12,7 +12,7 @@ using ToDo.WebAPI.Persistence.Context;
 namespace ToDo.WebAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250808081419_InitialCreate")]
+    [Migration("20250808113512_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
