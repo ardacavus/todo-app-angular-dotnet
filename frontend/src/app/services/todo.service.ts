@@ -1,33 +1,39 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Todo, CreateTodoRequest } from '../models/todo';
+import { Todo, CreateTodoRequest, UpdateTodoRequest } from '../models/todo';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TodoService {
-  private apiUrl = 'https://localhost:7059/api/todo';
+  // Backend'in swagger'daki portunu buraya yaz
+  private API_URL = 'https://localhost:12187/api/todo';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
+  // Tüm görevleri al
   getAllTodos(): Observable<Todo[]> {
-    return this.http.get<Todo[]>(this.apiUrl);
+    return this.http.get<Todo[]>(this.API_URL);
   }
 
+  // Tek görev
   getTodoById(id: string): Observable<Todo> {
-    return this.http.get<Todo>(`${this.apiUrl}/${id}`);
+    return this.http.get<Todo>(`${this.API_URL}/${id}`);
   }
 
-  createTodo(todo: CreateTodoRequest): Observable<string> {
-    return this.http.post<string>(this.apiUrl, todo);
+  // Yeni görev ekle
+  createTodo(request: CreateTodoRequest): Observable<Todo> {
+    return this.http.post<Todo>(this.API_URL, request);
   }
 
-  updateTodo(id: string, todo: CreateTodoRequest): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, todo);
+  // Görev güncelle
+  updateTodo(id: string, request: UpdateTodoRequest): Observable<Todo> {
+    return this.http.put<Todo>(`${this.API_URL}/${id}`, request);
   }
 
-  deleteTodo(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+  // Görev sil
+  deleteTodo(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/${id}`);
   }
 }

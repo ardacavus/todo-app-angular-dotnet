@@ -1,5 +1,5 @@
 export interface Todo {
-  id: string;
+  id: string; // Guid
   title: string;
   description: string;
   isCompleted: boolean;
@@ -7,6 +7,12 @@ export interface Todo {
 }
 
 export interface CreateTodoRequest {
+  title: string;
+  description: string;
+  isCompleted: boolean;
+}
+
+export interface UpdateTodoRequest {
   title: string;
   description: string;
   isCompleted: boolean;

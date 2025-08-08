@@ -1,67 +1,48 @@
-<div class="todo-container">
-  <div *ngIf="error" class="error-message">
-    ❌ {{ error }}
+<div class="todo-wrapper">
+  <h2>Yapılacaklar Listesi</h2>
+
+  <div *ngIf="error" class="alert">{{ error }}</div>
+
+  <!-- INPUT BAR -->
+  <div class="input-bar">
+    <input type="text"
+           [(ngModel)]="newTodo.title"
+           placeholder="Başlık girin" />
+    <input type="text"
+           [(ngModel)]="newTodo.description"
+           placeholder="Açıklama ekle" />
+    <button (click)="addTodo()">Ekle</button>
   </div>
 
-  <div class="add-todo-form">
-    <h3>✏️ Yeni Görev Ekle</h3>
-    <div class="form-group">
-      <input 
-        type="text" 
-        placeholder="Başlık*" 
-        [(ngModel)]="newTodo.title"
-        class="form-input"
-        (keyup.enter)="addTodo()">
+  <!-- FİLTRELER + SAYAÇLAR -->
+  <div class="filters">
+    <button [class.active]="filter==='all'" (click)="setFilter('all')">Tümü</button>
+    <button [class.active]="filter==='active'" (click)="setFilter('active')">Aktif</button>
+    <button [class.active]="filter==='completed'" (click)="setFilter('completed')">Tamamlanan</button>
+    <div class="counts">
+      <span>Toplam: {{ totalCount }}</span>
+      <span>Aktif: {{ activeCount }}</span>
+      <span>Tamamlanan: {{ completedCount }}</span>
     </div>
-    <div class="form-group">
-      <textarea 
-        placeholder="Açıklama (opsiyonel)" 
-        [(ngModel)]="newTodo.description"
-        class="form-textarea"
-        rows="3"></textarea>
-    </div>
-    <button 
-      (click)="addTodo()" 
-      class="add-button"
-      [disabled]="!newTodo.title.trim()">
-      ➕ Görev Ekle
-    </button>
   </div>
 
-  <div *ngIf="loading" class="loading">
-    ⏳ Yükleniyor...
-  </div>
-
-  <div *ngIf="!loading" class="todo-list">
-    <h3>📋 Görevlerim ({{ todos.length }})</h3>
-    
-    <div *ngIf="todos.length === 0" class="no-todos">
-      🎉 Henüz görev yok! Yukarıdan yeni görev ekle.
-    </div>
-
-    <div *ngFor="let todo of todos" class="todo-item" [class.completed]="todo.isCompleted">
-      <div class="todo-content">
-        <div class="todo-header">
-          <input 
-            type="checkbox" 
-            [checked]="todo.isCompleted"
-            (change)="toggleComplete(todo)"
-            class="todo-checkbox">
-          <h4 class="todo-title">{{ todo.title }}</h4>
-          <button 
-            (click)="deleteTodo(todo.id)" 
-            class="delete-button"
-            title="Sil">
-            🗑️
-          </button>
+  <!-- LİSTE -->
+  <ul class="list-group">
+    <li *ngFor="let todo of filteredTodos()"
+        class="list-group-item"
+        [class.completed]="todo.isCompleted">
+      <div class="left">
+        <button class="check" (click)="toggleTodoCompletion(todo)" aria-label="Tamamla/geri al">
+          {{ todo.isCompleted ? '✓' : '' }}
+        </button>
+        <div class="texts">
+          <strong>{{ todo.title }}</strong>
+          <span *ngIf="todo.description"> — {{ todo.description }}</span>
         </div>
-        <p *ngIf="todo.description" class="todo-description">
-          {{ todo.description }}
-        </p>
-        <small class="todo-date">
-          📅 {{ todo.createdAt | date:'dd/MM/yyyy HH:mm' }}
-        </small>
       </div>
-    </div>
-  </div>
+      <button class="btn-delete" (click)="deleteTodo(todo.id)">Sil</button>
+    </li>
+  </ul>
+
+  <p *ngIf="!filteredTodos().length" class="empty">Bu filtrede görev yok.</p>
 </div>
