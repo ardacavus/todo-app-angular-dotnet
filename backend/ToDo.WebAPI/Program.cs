@@ -162,7 +162,7 @@ api.MapGet("/", async (IGetAllToDosHandler h, HttpContext httpContext, Cancellat
     if (string.IsNullOrEmpty(userId))
         return Results.Unauthorized();
 
-    return Results.Ok(await h.HandleAsync(ct));
+    return Results.Ok(await h.HandleAsync(userId, ct));
 });
 
 api.MapGet("/{id:guid}", async (Guid id, IGetToDoByIdHandler h, HttpContext httpContext, CancellationToken ct) =>
@@ -171,7 +171,7 @@ api.MapGet("/{id:guid}", async (Guid id, IGetToDoByIdHandler h, HttpContext http
     if (string.IsNullOrEmpty(userId))
         return Results.Unauthorized();
 
-    var dto = await h.HandleAsync(id, ct);
+    var dto = await h.HandleAsync(id, userId, ct);
     return dto is null ? Results.NotFound() : Results.Ok(dto);
 });
 
@@ -181,7 +181,7 @@ api.MapPost("/", async (CreateToDoRequest req, ICreateToDoHandler h, HttpContext
     if (string.IsNullOrEmpty(userId))
         return Results.Unauthorized();
 
-    var dto = await h.HandleAsync(req, ct);
+    var dto = await h.HandleAsync(req, userId, ct);
     return Results.Created($"/api/todo/{dto.Id}", dto);
 });
 
@@ -191,7 +191,7 @@ api.MapPut("/{id:guid}", async (Guid id, UpdateToDoRequest req, IUpdateToDoHandl
     if (string.IsNullOrEmpty(userId))
         return Results.Unauthorized();
 
-    var dto = await h.HandleAsync(id, req, ct);
+    var dto = await h.HandleAsync(id, req, userId, ct);
     return dto is null ? Results.NotFound() : Results.Ok(dto);
 });
 
@@ -201,7 +201,7 @@ api.MapDelete("/{id:guid}", async (Guid id, IDeleteToDoHandler h, HttpContext ht
     if (string.IsNullOrEmpty(userId))
         return Results.Unauthorized();
 
-    var ok = await h.HandleAsync(id, ct);
+    var ok = await h.HandleAsync(id, userId, ct);
     return ok ? Results.NoContent() : Results.NotFound();
 });
 

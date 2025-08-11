@@ -1,20 +1,48 @@
 <div class="app-container">
-  <header class="app-header">
-    <div class="user-panel">
-      <div class="user-avatar">A</div>
-      <button class="menu-btn">⋮</button>
-    </div>
-    <h1>📝 ToDo List App</h1>
-  </header>
-  
-  <main class="app-main">
-    <app-todo-list></app-todo-list>
-  </main>
-  
-  <footer class="app-footer">
-    <div class="footer-content">
-      <p>&copy; 2025 Todo App. Tüm hakları saklıdır.</p>
-      <p>Yapılacaklar listenizi organize edin ve üretkenliğinizi artırın.</p>
-    </div>
-  </footer>
+  <div *ngIf="currentView === 'login'">
+    <app-login 
+      (switchToRegister)="showRegister()"
+      (loginSuccess)="showTodo()">
+    </app-login>
+  </div>
+
+  <div *ngIf="currentView === 'register'">
+    <app-registration (switchToLogin)="showLogin()"></app-registration>
+  </div>
+
+  <div *ngIf="currentView === 'todo'">
+    <header class="app-header">
+      <div class="user-panel">
+        <div class="user-avatar" (click)="toggleUserDropdown()">
+          {{ getUserInitial() }}
+        </div>
+        
+        <!-- User Dropdown -->
+        <div *ngIf="showUserDropdown" class="user-dropdown" (click)="closeDropdown()">
+          <div class="dropdown-content">
+            <div class="user-info">
+              <div class="user-name">{{ currentUser?.firstName }} {{ currentUser?.lastName }}</div>
+              <div class="user-email">{{ currentUser?.email }}</div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" (click)="logout()">
+              🚪 Çıkış Yap
+            </button>
+          </div>
+        </div>
+      </div>
+      <h1>📝 ToDo List App</h1>
+    </header>
+    
+    <main class="app-main">
+      <app-todo-list></app-todo-list>
+    </main>
+    
+    <footer class="app-footer">
+      <div class="footer-content">
+        <p>&copy; 2025 Todo App. Tüm hakları saklıdır.</p>
+        <p>Yapılacaklar listenizi organize edin ve üretkenliğinizi artırın.</p>
+      </div>
+    </footer>
+  </div>
 </div>

@@ -1,0 +1,100 @@
+<div class="registration-container">
+  <div class="registration-card">
+    <div class="card-header">
+      <h2>🚀 Hesap Oluştur</h2>
+      <p>ToDo List uygulamasına hoş geldiniz</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" #registrationForm="ngForm" class="registration-form">
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstName">Ad</label>
+          <input 
+            type="text" 
+            id="firstName" 
+            name="firstName"
+            [(ngModel)]="user.firstName"
+            required
+            placeholder="Adınız">
+        </div>
+        
+        <div class="form-group">
+          <label for="lastName">Soyad</label>
+          <input 
+            type="text" 
+            id="lastName" 
+            name="lastName"
+            [(ngModel)]="user.lastName"
+            required
+            placeholder="Soyadınız">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">E-posta</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email"
+          [(ngModel)]="user.email"
+          required
+          placeholder="ornek@email.com">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Şifre</label>
+        <div class="password-input">
+          <input 
+            [type]="showPassword ? 'text' : 'password'" 
+            id="password" 
+            name="password"
+            [(ngModel)]="user.password"
+            required
+            minlength="6"
+            placeholder="En az 6 karakter">
+          <button 
+            type="button" 
+            class="toggle-password"
+            (click)="togglePasswordVisibility()">
+            {{showPassword ? '🙈' : '👁️'}}
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Şifre Tekrar</label>
+        <div class="password-input">
+          <input 
+            [type]="showConfirmPassword ? 'text' : 'password'" 
+            id="confirmPassword" 
+            name="confirmPassword"
+            [(ngModel)]="user.confirmPassword"
+            required
+            placeholder="Şifrenizi tekrar girin">
+          <button 
+            type="button" 
+            class="toggle-password"
+            (click)="toggleConfirmPasswordVisibility()">
+            {{showConfirmPassword ? '🙈' : '👁️'}}
+          </button>
+        </div>
+      </div>
+
+      <button 
+        type="submit" 
+        class="submit-btn"
+        [disabled]="!registrationForm.form.valid || isLoading">
+        <span *ngIf="isLoading">Hesap oluşturuluyor...</span>
+        <span *ngIf="!isLoading">Hesap Oluştur</span>
+      </button>
+    </form>
+
+    <div class="card-footer">
+      <p>Zaten hesabınız var mı? <a href="#" class="login-link" (click)="onLoginClick(); $event.preventDefault()">Giriş Yap</a></p>
+    </div>
+  </div>
+</div>

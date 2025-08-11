@@ -28,14 +28,25 @@ export class TodoListComponent implements OnInit {
 
   constructor(private todoService: TodoService) {}
 
-  ngOnInit(): void { this.loadTodos(); }
+  ngOnInit(): void { 
+    this.loadTodos(); 
+  }
 
-  // ---- Counters for template (no arrow functions in HTML)
-  get totalCount(): number { return this.todos.length; }
-  get activeCount(): number { return this.todos.filter(t => !t.isCompleted).length; }
-  get completedCount(): number { return this.todos.filter(t => t.isCompleted).length; }
+  get totalCount(): number { 
+    return this.todos.length; 
+  }
+  
+  get activeCount(): number { 
+    return this.todos.filter(t => !t.isCompleted).length; 
+  }
+  
+  get completedCount(): number { 
+    return this.todos.filter(t => t.isCompleted).length; 
+  }
 
-  setFilter(f: Filter) { this.filter = f; }
+  setFilter(f: Filter) { 
+    this.filter = f; 
+  }
 
   filteredTodos(): Todo[] {
     switch (this.filter) {
@@ -47,42 +58,67 @@ export class TodoListComponent implements OnInit {
 
   loadTodos(): void {
     this.loading = true;
+    this.error = '';
+    
     this.todoService.getAllTodos().subscribe({
-      next: (todos) => { this.todos = todos; this.loading = false; },
-      error: (err) => { console.error('Todo yükleme hatası:', err); this.error = 'Görevler yüklenemedi'; this.loading = false; }
+      next: (todos) => { 
+        this.todos = todos; 
+        this.loading = false; 
+      },
+      error: (err) => { 
+        console.error('Todo yükleme hatası:', err); 
+        this.error = 'Görevler yüklenemedi. Lütfen giriş yapın.'; 
+        this.loading = false; 
+      }
     });
   }
 
   addTodo(): void {
     if (!this.newTodo.title.trim()) return;
+    
+    this.error = '';
     this.todoService.createTodo(this.newTodo).subscribe({
       next: (created) => {
         this.todos.unshift(created);
         this.newTodo = { title: '', description: '', isCompleted: false };
       },
-      error: (err) => { console.error('Todo ekleme hatası:', err); this.error = 'Görev eklenemedi'; }
+      error: (err) => { 
+        console.error('Todo ekleme hatası:', err); 
+        this.error = 'Görev eklenemedi. Lütfen tekrar deneyin.'; 
+      }
     });
   }
 
   toggleTodoCompletion(todo: Todo): void {
+    this.error = '';
     const body: UpdateTodoRequest = {
       title: todo.title,
       description: todo.description,
       isCompleted: !todo.isCompleted
     };
+    
     this.todoService.updateTodo(todo.id, body).subscribe({
       next: (updated) => {
         const i = this.todos.findIndex(t => t.id === todo.id);
         if (i > -1) this.todos[i] = updated;
       },
-      error: (err) => { console.error('Güncelleme hatası:', err); this.error = 'Görev güncellenemedi'; }
+      error: (err) => { 
+        console.error('Güncelleme hatası:', err); 
+        this.error = 'Görev güncellenemedi. Lütfen tekrar deneyin.'; 
+      }
     });
   }
 
   deleteTodo(id: string): void {
+    this.error = '';
     this.todoService.deleteTodo(id).subscribe({
-      next: () => { this.todos = this.todos.filter(t => t.id !== id); },
-      error: (err) => { console.error('Silme hatası:', err); this.error = 'Görev silinemedi'; }
+      next: () => { 
+        this.todos = this.todos.filter(t => t.id !== id); 
+      },
+      error: (err) => { 
+        console.error('Silme hatası:', err); 
+        this.error = 'Görev silinemedi. Lütfen tekrar deneyin.'; 
+      }
     });
   }
 }

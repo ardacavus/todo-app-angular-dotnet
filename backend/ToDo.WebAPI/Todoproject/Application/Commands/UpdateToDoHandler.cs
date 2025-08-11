@@ -5,18 +5,19 @@ namespace ToDo.WebAPI.Todoproject.Application.Commands
 {
     public interface IUpdateToDoHandler
     {
-        Task<ToDoDto?> HandleAsync(Guid id, UpdateToDoRequest request, CancellationToken ct);
+        Task<ToDoDto?> HandleAsync(Guid id, UpdateToDoRequest request, string userId, CancellationToken ct);
     }
 
     public class UpdateToDoHandler : IUpdateToDoHandler
     {
         private readonly IToDoRepository _repo;
+
         public UpdateToDoHandler(IToDoRepository repo) => _repo = repo;
 
-        public async Task<ToDoDto?> HandleAsync(Guid id, UpdateToDoRequest req, CancellationToken ct)
+        public async Task<ToDoDto?> HandleAsync(Guid id, UpdateToDoRequest req, string userId, CancellationToken ct)
         {
             var e = await _repo.GetByIdAsync(id, ct);
-            if (e is null) return null;
+            if (e is null || e.UserId != userId) return null;
 
             e.Title = req.Title;
             e.Description = req.Description;

@@ -1,0 +1,60 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="card-header">
+      <h2>🔐 Giriş Yap</h2>
+      <p>Hesabınıza giriş yapın</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" #loginForm="ngForm" class="login-form">
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
+      <div class="form-group">
+        <label for="email">E-posta</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email"
+          [(ngModel)]="user.email"
+          required
+          placeholder="ornek@email.com">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Şifre</label>
+        <div class="password-input">
+          <input 
+            [type]="showPassword ? 'text' : 'password'" 
+            id="password" 
+            name="password"
+            [(ngModel)]="user.password"
+            required
+            placeholder="Şifrenizi girin">
+          <button 
+            type="button" 
+            class="toggle-password"
+            (click)="togglePasswordVisibility()">
+            {{showPassword ? '🙈' : '👁️'}}
+          </button>
+        </div>
+      </div>
+
+      <div class="forgot-password">
+        <a href="#" class="forgot-link">Şifremi unuttum</a>
+      </div>
+
+      <button 
+        type="submit" 
+        class="submit-btn"
+        [disabled]="!loginForm.form.valid || isLoading">
+        <span *ngIf="isLoading">Giriş yapılıyor...</span>
+        <span *ngIf="!isLoading">Giriş Yap</span>
+      </button>
+    </form>
+
+    <div class="card-footer">
+      <p>Hesabınız yok mu? <a href="#" class="register-link" (click)="onRegisterClick(); $event.preventDefault()">Kayıt Ol</a></p>
+    </div>
+  </div>
+</div>
