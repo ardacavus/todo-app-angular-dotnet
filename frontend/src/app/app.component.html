@@ -1,12 +1,20 @@
 <div class="app-container">
-  <header class="header">
-    <h1>📝 Todo App</h1>
-    <p>Angular + .NET Core</p>
+  <header class="app-header">
+    <div class="user-panel">
+      <div class="user-avatar">A</div>
+      <button class="menu-btn">⋮</button>
+    </div>
+    <h1>📝 ToDo List App</h1>
   </header>
   
-  <main class="main-content">
-    <div class="todo-wrapper">
-      <app-todo-list></app-todo-list>
-    </div>
+  <main class="app-main">
+    <app-todo-list></app-todo-list>
   </main>
+  
+  <footer class="app-footer">
+    <div class="footer-content">
+      <p>&copy; 2025 Todo App. Tüm hakları saklıdır.</p>
+      <p>Yapılacaklar listenizi organize edin ve üretkenliğinizi artırın.</p>
+    </div>
+  </footer>
 </div>
