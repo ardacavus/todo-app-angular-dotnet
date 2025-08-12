@@ -54,8 +54,21 @@ export class RegistrationComponent {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Kayıt hatası:', error);
-        this.errorMessage = 'Kayıt işlemi başarısız!';
+        console.error('Kayıt hatası tamamı:', error); // Debug için
+        console.error('Error status:', error.status); // Debug için
+        console.error('Error message:', error.error); // Debug için
+        
+        // Farklı hata formatlarını dene
+        if (error.error && error.error.message) {
+          this.errorMessage = error.error.message;
+        } else if (error.message) {
+          this.errorMessage = error.message;
+        } else if (typeof error.error === 'string') {
+          this.errorMessage = error.error;
+        } else {
+          this.errorMessage = 'Bu e-posta adresi zaten kullanımda!';
+        }
+        
         this.isLoading = false;
       }
     });

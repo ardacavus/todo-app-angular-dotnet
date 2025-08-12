@@ -2,12 +2,17 @@
   <div *ngIf="currentView === 'login'">
     <app-login 
       (switchToRegister)="showRegister()"
+      (switchToForgotPassword)="showForgotPassword()"
       (loginSuccess)="showTodo()">
     </app-login>
   </div>
 
   <div *ngIf="currentView === 'register'">
     <app-registration (switchToLogin)="showLogin()"></app-registration>
+  </div>
+
+  <div *ngIf="currentView === 'forgot-password'">
+    <app-forgot-password (backToLogin)="showLogin()"></app-forgot-password>
   </div>
 
   <div *ngIf="currentView === 'todo'">
@@ -17,7 +22,6 @@
           {{ getUserInitial() }}
         </div>
         
-        <!-- User Dropdown -->
         <div *ngIf="showUserDropdown" class="user-dropdown" (click)="closeDropdown()">
           <div class="dropdown-content">
             <div class="user-info">

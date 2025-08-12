@@ -6,6 +6,11 @@
     </div>
 
     <form (ngSubmit)="onSubmit()" #registrationForm="ngForm" class="registration-form">
+      <!-- HATA MESAJI DIV'İNİ EKLE -->
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
       <div class="form-row">
         <div class="form-group">
           <label for="firstName">Ad</label>
@@ -83,15 +88,17 @@
       <button 
         type="submit" 
         class="submit-btn"
-        [disabled]="!registrationForm.form.valid">
-        Hesap Oluştur
+        [disabled]="!registrationForm.form.valid || isLoading">
+        <span *ngIf="isLoading">Hesap oluşturuluyor...</span>
+        <span *ngIf="!isLoading">Hesap Oluştur</span>
       </button>
     </form>
 
     <div class="card-footer">
-    <p>Zaten hesabınız var mı? <a href="#" class="login-link" (click)="onLoginClick()">Giriş Yap</a></p>
+      <p>Zaten hesabınız var mı? <a href="#" class="login-link" (click)="onLoginClick(); $event.preventDefault()">Giriş Yap</a></p>
     </div>
   </div>
+  
   <div class="auth-footer">
     <div class="footer-content">
       <p>&copy; 2025 Todo App. Arda Çavuş tarafından geliştirilmiştir.</p>

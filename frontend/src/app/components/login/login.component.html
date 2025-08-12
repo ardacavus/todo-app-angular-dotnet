@@ -41,7 +41,7 @@
       </div>
 
       <div class="forgot-password">
-        <a href="#" class="forgot-link">Şifremi unuttum</a>
+        <a href="#" class="forgot-link" (click)="onForgotPasswordClick(); $event.preventDefault()">Şifremi unuttum</a>
       </div>
 
       <button 
@@ -58,7 +58,6 @@
     </div>
   </div>
 
-  <!-- Footer -->
   <div class="auth-footer">
     <div class="footer-content">
       <p>&copy; 2025 Todo App. Arda Çavuş tarafından geliştirilmiştir.</p>

@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { TodoListComponent } from './components/todo-list/todo-list.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { LoginComponent } from './components/login/login.component';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { AuthService, User } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, TodoListComponent, RegistrationComponent, LoginComponent],
+  imports: [CommonModule, TodoListComponent, RegistrationComponent, LoginComponent, ForgotPasswordComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
@@ -41,6 +42,10 @@ export class AppComponent implements OnInit {
 
   showRegister() {
     this.currentView = 'register';
+  }
+
+  showForgotPassword() {
+    this.currentView = 'forgot-password';
   }
 
   showTodo() {

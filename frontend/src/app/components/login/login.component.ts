@@ -12,6 +12,7 @@ import { AuthService, LoginRequest } from '../../services/auth.service';
 })
 export class LoginComponent {
   @Output() switchToRegister = new EventEmitter<void>();
+  @Output() switchToForgotPassword = new EventEmitter<void>();
   @Output() loginSuccess = new EventEmitter<void>();
 
   user: LoginRequest = {
@@ -39,7 +40,7 @@ export class LoginComponent {
       },
       error: (error) => {
         console.error('Giriş hatası:', error);
-        this.errorMessage = 'Geçersiz e-posta veya şifre!';
+        this.errorMessage = error.error?.message || 'Giriş işlemi başarısız!';
         this.isLoading = false;
       }
     });
@@ -51,5 +52,9 @@ export class LoginComponent {
 
   onRegisterClick() {
     this.switchToRegister.emit();
+  }
+
+  onForgotPasswordClick() {
+    this.switchToForgotPassword.emit();
   }
 }

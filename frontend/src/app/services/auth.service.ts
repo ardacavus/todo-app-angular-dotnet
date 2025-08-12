@@ -31,12 +31,11 @@ export interface AuthResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'https://localhost:12187/api/auth'; // Backend URL'ini güncelle
+  private apiUrl = 'https://localhost:12187/api/auth';
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private http: HttpClient) {
-    // Sayfa yüklendiğinde token kontrolü
     this.checkStoredAuth();
   }
 
@@ -53,6 +52,10 @@ export class AuthService {
           this.currentUserSubject.next(response.user);
         })
       );
+  }
+
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/forgot-password`, { email });
   }
 
   logout(): void {
