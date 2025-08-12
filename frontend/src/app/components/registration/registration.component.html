@@ -6,10 +6,6 @@
     </div>
 
     <form (ngSubmit)="onSubmit()" #registrationForm="ngForm" class="registration-form">
-      <!-- HATA MESAJI DIV'İNİ EKLE -->
-      <div *ngIf="errorMessage" class="error-message">
-        {{ errorMessage }}
-      </div>
 
       <div class="form-row">
         <div class="form-group">

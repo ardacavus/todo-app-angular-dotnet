@@ -28,7 +28,9 @@
           class="list-group-item"
           [class.completed]="todo.isCompleted">
         <div class="left">
-          <button class="check" (click)="toggleTodoCompletion(todo)" aria-label="Tamamla/geri al">
+          <button class="check" 
+                  (click)="toggleTodoCompletion(todo, $event)" 
+                  aria-label="Tamamla/geri al">
             {{ todo.isCompleted ? '✓' : '' }}
           </button>
           <div class="texts">
@@ -37,10 +39,14 @@
           </div>
         </div>
         <div class="actions">
-          <button class="btn-edit" (click)="editTodo(todo)" title="Düzenle">
+          <button class="btn-edit" 
+                  (click)="editTodo(todo, $event)" 
+                  title="Düzenle">
             <span>✏️</span>
           </button>
-          <button class="btn-delete" (click)="deleteTodo(todo.id)" title="Sil">
+          <button class="btn-delete" 
+                  (click)="deleteTodo(todo.id, $event)" 
+                  title="Sil">
             <span>🗑️</span>
           </button>
         </div>

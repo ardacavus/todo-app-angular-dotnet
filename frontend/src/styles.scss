@@ -15,3 +15,12 @@ app-root {
   padding: 0;
   min-height: 100vh;
 }
+
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none; 
+}
+
+html, body {
+  overflow-x: hidden;
+}
