@@ -23,7 +23,7 @@ namespace ToDo.WebAPI.Services
         {
             try
             {
-                var resetLink = $"https://localhost:4200/reset-password?email={email}&token={Uri.EscapeDataString(resetToken)}";
+                var resetLink = $"http://localhost:4200/reset-password?email={email}&token={Uri.EscapeDataString(resetToken)}";
 
                 var emailMessage = new MimeMessage();
 

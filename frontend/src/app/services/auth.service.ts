@@ -31,7 +31,7 @@ export interface AuthResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'https://localhost:12187/api/auth';
+  private apiUrl = 'https://localhost:12187/api/auth'; // ✅ Port'u düzelt
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
@@ -56,6 +56,15 @@ export class AuthService {
 
   forgotPassword(email: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/forgot-password`, { email });
+  }
+
+  // ✅ URL'yi düzelt - /auth kısmını kaldır
+  resetPassword(email: string, token: string, newPassword: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/reset-password`, {
+      email,
+      token,
+      newPassword
+    });
   }
 
   logout(): void {

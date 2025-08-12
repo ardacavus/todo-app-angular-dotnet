@@ -4,12 +4,20 @@ import { TodoListComponent } from './components/todo-list/todo-list.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { LoginComponent } from './components/login/login.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component'; // ✅ Import ekle
 import { AuthService, User } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, TodoListComponent, RegistrationComponent, LoginComponent, ForgotPasswordComponent],
+  imports: [
+    CommonModule, 
+    TodoListComponent, 
+    RegistrationComponent, 
+    LoginComponent, 
+    ForgotPasswordComponent,
+    ResetPasswordComponent // ✅ Import'a ekle
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
@@ -25,6 +33,13 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     console.log('APP COMPONENT ÇALIŞTI');
     
+    // ✅ URL'den reset-password parametrelerini kontrol et
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('token') && urlParams.has('email')) {
+      this.showResetPassword();
+      return; // AuthService check'ini atla
+    }
+    
     this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
       this.isLoggedIn = !!user;
@@ -38,6 +53,8 @@ export class AppComponent implements OnInit {
 
   showLogin() {
     this.currentView = 'login';
+    // ✅ URL'yi temizle
+    window.history.replaceState({}, document.title, window.location.pathname);
   }
 
   showRegister() {
@@ -46,6 +63,11 @@ export class AppComponent implements OnInit {
 
   showForgotPassword() {
     this.currentView = 'forgot-password';
+  }
+
+  // ✅ YENİ: Reset password view
+  showResetPassword() {
+    this.currentView = 'reset-password';
   }
 
   showTodo() {

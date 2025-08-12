@@ -11,7 +11,6 @@ namespace ToDo.WebAPI.Todoproject.Application.Commands
     public class CreateToDoHandler : ICreateToDoHandler
     {
         private readonly IToDoRepository _repo;
-
         public CreateToDoHandler(IToDoRepository repo) => _repo = repo;
 
         public async Task<ToDoDto> HandleAsync(CreateToDoRequest req, string userId, CancellationToken ct)
@@ -22,7 +21,7 @@ namespace ToDo.WebAPI.Todoproject.Application.Commands
             var entity = new Entities.Entity.Todo
             {
                 Title = req.Title.Trim(),
-                Description = string.IsNullOrWhiteSpace(req.Description) ? null : req.Description!.Trim(),
+                Description = string.IsNullOrWhiteSpace(req.Description) ? string.Empty : req.Description!.Trim(), // 👈 NULL DEĞİL EMPTY STRING
                 IsCompleted = req.IsCompleted,
                 UserId = userId
             };

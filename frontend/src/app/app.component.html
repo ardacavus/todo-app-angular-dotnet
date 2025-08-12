@@ -15,6 +15,11 @@
     <app-forgot-password (backToLogin)="showLogin()"></app-forgot-password>
   </div>
 
+  <!-- ✅ YENİ: Reset Password View -->
+  <div *ngIf="currentView === 'reset-password'">
+    <app-reset-password (backToLogin)="showLogin()"></app-reset-password>
+  </div>
+
   <div *ngIf="currentView === 'todo'">
     <header class="app-header">
       <div class="user-panel">

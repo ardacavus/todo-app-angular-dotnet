@@ -1,48 +1,116 @@
 <div class="todo-wrapper">
-  <h2>Yapılacaklar Listesi</h2>
+  <div class="header-section">
+    <div class="title-container">
+      <h2>📋 To-Do Listesi</h2>
+    </div>
+    <button class="add-todo-btn" (click)="openAddDialog()">
+      <span class="plus-icon">＋</span>
+      <span class="btn-text">Yeni Görev</span>
+    </button>
+  </div>
 
   <div *ngIf="error" class="alert">{{ error }}</div>
 
-  <!-- INPUT BAR -->
-  <div class="input-bar">
-    <input type="text"
-           [(ngModel)]="newTodo.title"
-           placeholder="Başlık girin" />
-    <input type="text"
-           [(ngModel)]="newTodo.description"
-           placeholder="Açıklama ekle" />
-    <button (click)="addTodo()">Ekle</button>
-  </div>
+  <!-- LİSTE -->
+  <div class="todo-list-section">
+    <!-- Filtreler üstte ama daha kompakt -->
+    <div class="filters-compact">
+      <div class="filter-buttons">
+        <button [class.active]="filter==='all'" (click)="setFilter('all')">Tümü ({{ totalCount }})</button>
+        <button [class.active]="filter==='active'" (click)="setFilter('active')">Aktif ({{ activeCount }})</button>
+        <button [class.active]="filter==='completed'" (click)="setFilter('completed')">Tamamlanan ({{ completedCount }})</button>
+      </div>
+    </div>
 
-  <!-- FİLTRELER + SAYAÇLAR -->
-  <div class="filters">
-    <button [class.active]="filter==='all'" (click)="setFilter('all')">Tümü</button>
-    <button [class.active]="filter==='active'" (click)="setFilter('active')">Aktif</button>
-    <button [class.active]="filter==='completed'" (click)="setFilter('completed')">Tamamlanan</button>
-    <div class="counts">
-      <span>Toplam: {{ totalCount }}</span>
-      <span>Aktif: {{ activeCount }}</span>
-      <span>Tamamlanan: {{ completedCount }}</span>
+    <!-- Todo listesi -->
+    <ul class="list-group">
+      <li *ngFor="let todo of filteredTodos()"
+          class="list-group-item"
+          [class.completed]="todo.isCompleted">
+        <div class="left">
+          <button class="check" (click)="toggleTodoCompletion(todo)" aria-label="Tamamla/geri al">
+            {{ todo.isCompleted ? '✓' : '' }}
+          </button>
+          <div class="texts">
+            <strong>{{ todo.title }}</strong>
+            <span *ngIf="todo.description"> — {{ todo.description }}</span>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn-edit" (click)="editTodo(todo)" title="Düzenle">
+            <span>✏️</span>
+          </button>
+          <button class="btn-delete" (click)="deleteTodo(todo.id)" title="Sil">
+            <span>🗑️</span>
+          </button>
+        </div>
+      </li>
+    </ul>
+
+    <div *ngIf="!filteredTodos().length" class="empty">
+      <div class="empty-content">
+        <div class="empty-icon">📝</div>
+        <h3>Henüz görev yok</h3>
+        <p>{{ getEmptyMessage() }}</p>
+      </div>
     </div>
   </div>
 
-  <!-- LİSTE -->
-  <ul class="list-group">
-    <li *ngFor="let todo of filteredTodos()"
-        class="list-group-item"
-        [class.completed]="todo.isCompleted">
-      <div class="left">
-        <button class="check" (click)="toggleTodoCompletion(todo)" aria-label="Tamamla/geri al">
-          {{ todo.isCompleted ? '✓' : '' }}
-        </button>
-        <div class="texts">
-          <strong>{{ todo.title }}</strong>
-          <span *ngIf="todo.description"> — {{ todo.description }}</span>
-        </div>
+  <!-- ADD TODO MODAL -->
+  <div class="modal-overlay" *ngIf="showAddDialog" (click)="closeAddDialog()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>{{ editingTodo ? 'Görevi Düzenle' : 'Yeni Görev Ekle' }}</h3>
+        <button class="close-btn" (click)="closeAddDialog()">×</button>
       </div>
-      <button class="btn-delete" (click)="deleteTodo(todo.id)">Sil</button>
-    </li>
-  </ul>
-
-  <p *ngIf="!filteredTodos().length" class="empty">Bu filtrede görev yok.</p>
+      
+      <form (ngSubmit)="onSubmit()" #todoForm="ngForm" class="modal-form">
+        <div class="form-group">
+          <label for="title">Başlık *</label>
+          <input 
+            type="text" 
+            id="title"
+            name="title"
+            [(ngModel)]="newTodo.title"
+            placeholder="Görev başlığı"
+            class="form-input"
+            required
+            #titleInput>
+        </div>
+        
+        <div class="form-group">
+          <label for="description">Açıklama</label>
+          <textarea 
+            id="description"
+            name="description"
+            [(ngModel)]="newTodo.description"
+            placeholder="Görev açıklaması (opsiyonel)"
+            class="form-textarea"
+            rows="3"></textarea>
+        </div>
+        
+        <div class="form-group" *ngIf="editingTodo">
+          <label class="checkbox-label">
+            <input 
+              type="checkbox"
+              name="isCompleted"
+              [(ngModel)]="newTodo.isCompleted"
+              class="form-checkbox">
+            <span class="checkmark"></span>
+            Tamamlandı olarak işaretle
+          </label>
+        </div>
+        
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="closeAddDialog()">
+            ❌ İptal
+          </button>
+          <button type="submit" class="btn-save" [class.loading]="loading">
+            <span *ngIf="loading">💾 Kaydediliyor...</span>
+            <span *ngIf="!loading">{{ editingTodo ? '✅ Güncelle' : '➕ Ekle' }}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
