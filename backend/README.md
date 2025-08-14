@@ -1,39 +1,33 @@
-📝 To-Do App Backend
+# 📝 To-Do App Backend
 
-This is the backend service for the To-Do List Application, built with .NET Core and Entity Framework Core following the CQRS pattern.
-It provides RESTful APIs for managing to-do items, storing data in an MSSQL Server database.
+This is the backend service for the **To-Do List Application**, built with **.NET Core** and **Entity Framework Core** following the **CQRS** pattern.  
+It provides RESTful APIs for managing to-do items, storing data in an **MSSQL Server** database.
 
-📌 Features
+---
 
-CQRS Architecture (Command & Query Separation)
+## 📌 Features
+- **CQRS Architecture** (Command & Query Separation)
+- **CRUD Operations** (Create, Read, Update, Delete)
+- **Repository Pattern**
+- **Entity Framework Core** with **MSSQL**
+- **Swagger API Documentation**
+- **Clean Code** & Layered Architecture
 
-CRUD Operations (Create, Read, Update, Delete)
+---
 
-Repository Pattern
+## 🛠 Technologies Used
+- .NET 8 Web API
+- Entity Framework Core
+- MSSQL Server
+- CQRS Pattern
+- Repository Pattern
+- Swagger / Swashbuckle
+- Dependency Injection
 
-Entity Framework Core with MSSQL
+---
 
-Swagger API Documentation
-
-Clean Code & Layered Architecture
-
-🛠 Technologies Used
-
-.NET 8 Web API
-
-Entity Framework Core
-
-MSSQL Server
-
-CQRS Pattern
-
-Repository Pattern
-
-Swagger / Swashbuckle
-
-Dependency Injection
-
-📂 Project Structure
+## 📂 Project Structure
+```
 ToDo.WebAPI
  ├── Migrations
  ├── Todoproject
@@ -44,39 +38,54 @@ ToDo.WebAPI
  │   ├── Services           # Business logic services
  ├── appsettings.json
  ├── Program.cs
+```
 
-⚙️ Setup Instructions
-1️⃣ Clone the Repository
+---
+
+## ⚙️ Setup Instructions
+
+### 1️⃣ Clone the Repository
+```bash
 git clone https://github.com/ardacavus/todo-app-angular-dotnet.git
 cd backend
+```
 
-2️⃣ Configure the Database
-
-Edit appsettings.json with your MSSQL connection string:
-
+### 2️⃣ Configure the Database
+Edit `appsettings.json` with your MSSQL connection string:
+```json
 "ConnectionStrings": {
   "DefaultConnection": "Server=YOUR_SERVER;Database=TodoDb;Trusted_Connection=True;TrustServerCertificate=True;"
 }
+```
 
-3️⃣ Apply EF Core Migrations
+### 3️⃣ Apply EF Core Migrations
+```bash
 dotnet ef database update
+```
 
-4️⃣ Run the Application
+### 4️⃣ Run the Application
+```bash
 dotnet run
+```
+Backend will run by default on:  
+[https://localhost:12187](https://localhost:12187)
 
+---
 
-The backend will run by default on:
+## 📡 API Endpoints
 
-https://localhost:12187
+| Method | Endpoint           | Description                |
+|--------|-------------------|----------------------------|
+| GET    | `/api/todo`       | Get all to-dos              |
+| GET    | `/api/todo/{id}`  | Get a to-do by ID           |
+| POST   | `/api/todo`       | Create a new to-do          |
+| PUT    | `/api/todo/{id}`  | Update an existing to-do    |
+| DELETE | `/api/todo/{id}`  | Delete a to-do              |
 
-📡 API Endpoints
-Method	Endpoint	Description
-GET	/api/todo	Get all to-dos
-GET	/api/todo/{id}	Get a to-do by ID
-POST	/api/todo	Create a new to-do
-PUT	/api/todo/{id}	Update an existing to-do
-DELETE	/api/todo/{id}	Delete a to-do
-🔍 Example Request (Create To-Do)
+---
+
+## 🔍 Example Request (Create To-Do)
+```http
 POST /api/todo
 Content-Type: application/json
 
@@ -85,3 +94,6 @@ Content-Type: application/json
   "description": "Write a detailed backend documentation",
   "isCompleted": false
 }
+```
+
+
