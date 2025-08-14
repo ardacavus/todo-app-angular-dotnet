@@ -1,46 +1,87 @@
-\# 📝 To-Do List Application
+# 🖥️ To-Do App Frontend
 
-
-
-This is a full-stack To-Do List application developed as part of a training project. The app allows users to add, update, complete, and delete tasks.
-
-
+This is the frontend of the **To-Do List Application**, built with **Angular**.  
+It provides a simple and responsive user interface for managing to-do items via the backend API.
 
 ---
 
-
-
-\## 🚀 Technologies Used
-
-
-
-\- ASP.NET Core Web API (.NET 8)
-
-\- Entity Framework Core + MSSQL
-
-\- Angular
-
-\- HTML, SCSS, TypeScript
-
-\- CQRS Architecture
-
-
+## 📌 Features
+- **Add New Tasks**
+- **Edit Existing Tasks**
+- **Mark Tasks as Completed**
+- **Delete Tasks**
+- **List All Tasks**
+- **Form Validation & Notifications**
+- **Responsive UI with SCSS**
 
 ---
 
+## 🛠 Technologies Used
+- Angular
+- TypeScript
+- HTML5
+- SCSS
+- Angular HttpClient for API requests
 
+---
 
-\## 🔌 API Endpoints
+## 📂 Project Structure
+```
+src
+ ├── app
+ │   ├── components
+ │   │   ├── app               # Main App Component
+ │   │   ├── forgot-password   # Forgot password page
+ │   │   ├── login             # Login page
+ │   │   ├── notification      # Notifications component
+ │   │   ├── registration      # Registration page
+ │   │   ├── reset-password    # Password reset page
+ │   │   ├── todo-list         # Main to-do list UI
+ │   ├── core                  # Core utilities
+ │   ├── interceptors          # HTTP interceptors
+ │   ├── models                # Data models
+ │   ├── services              # API services
+ ├── assets
+ ├── styles.scss               # Global styles
+ ├── index.html
+ ├── main.ts
+```
 
+---
 
+## ⚙️ Setup Instructions
 
-\- `GET /api/todo` – Get all tasks  
+### 1️⃣ Clone the Repository
+```bash
+git clone https://github.com/ardacavus/todo-app-angular-dotnet.git
+cd frontend
+```
 
-\- `GET /api/todo/{id}` – Get task by ID  
+### 2️⃣ Install Dependencies
+```bash
+npm install
+```
 
-\- `POST /api/todo` – Add a new task  
+### 3️⃣ Configure API URL
+Edit `environment.ts` to match your backend URL:
+```typescript
+export const environment = {
+  production: false,
+  apiUrl: 'https://localhost:12187/api'
+};
+```
 
-\- `PUT /api/todo/{id}` – Update a task  
+### 4️⃣ Run the Application
+```bash
+ng serve
+```
+Frontend will run by default on:  
+[http://localhost:4200](http://localhost:4200)
 
-\- `DELETE /api/todo/{id}` – Delete a task  
+---
+
+## 📡 API Communication
+The frontend communicates with the **.NET Core Web API** backend using Angular's `HttpClient` module.
+
+---
 
