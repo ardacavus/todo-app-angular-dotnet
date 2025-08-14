@@ -3,9 +3,6 @@ html, body {
   padding: 0;
   height: 100%;
   overflow-x: hidden;
-}
-
-body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -18,9 +15,5 @@ app-root {
 
 * {
   scrollbar-width: none;
-  -ms-overflow-style: none; 
-}
-
-html, body {
-  overflow-x: hidden;
+  -ms-overflow-style: none;
 }

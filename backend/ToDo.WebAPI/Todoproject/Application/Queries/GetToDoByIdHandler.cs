@@ -18,7 +18,6 @@ namespace ToDo.WebAPI.Todoproject.Application.Queries
         {
             var e = await _repo.GetByIdAsync(id, ct);
             if (e is null || e.UserId != userId) return null;
-
             return new ToDoDto(e.Id, e.Title, e.Description, e.IsCompleted, e.CreatedAt);
         }
     }

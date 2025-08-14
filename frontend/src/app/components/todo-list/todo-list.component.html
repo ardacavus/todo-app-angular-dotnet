@@ -11,9 +11,7 @@
 
   <div *ngIf="error" class="alert">{{ error }}</div>
 
-  <!-- LİSTE -->
   <div class="todo-list-section">
-    <!-- Filtreler üstte ama daha kompakt -->
     <div class="filters-compact">
       <div class="filter-buttons">
         <button [class.active]="filter==='all'" (click)="setFilter('all')">Tümü ({{ totalCount }})</button>
@@ -22,15 +20,10 @@
       </div>
     </div>
 
-    <!-- Todo listesi -->
     <ul class="list-group">
-      <li *ngFor="let todo of filteredTodos()"
-          class="list-group-item"
-          [class.completed]="todo.isCompleted">
+      <li *ngFor="let todo of filteredTodos()" class="list-group-item" [class.completed]="todo.isCompleted">
         <div class="left">
-          <button class="check" 
-                  (click)="toggleTodoCompletion(todo, $event)" 
-                  aria-label="Tamamla/geri al">
+          <button class="check" (click)="toggleTodoCompletion(todo, $event)" aria-label="Tamamla/geri al">
             {{ todo.isCompleted ? '✓' : '' }}
           </button>
           <div class="texts">
@@ -39,16 +32,8 @@
           </div>
         </div>
         <div class="actions">
-          <button class="btn-edit" 
-                  (click)="editTodo(todo, $event)" 
-                  title="Düzenle">
-            <span>✏️</span>
-          </button>
-          <button class="btn-delete" 
-                  (click)="deleteTodo(todo.id, $event)" 
-                  title="Sil">
-            <span>🗑️</span>
-          </button>
+          <button class="btn-edit" (click)="editTodo(todo, $event)" title="Düzenle"><span>✏️</span></button>
+          <button class="btn-delete" (click)="deleteTodo(todo.id, $event)" title="Sil"><span>🗑️</span></button>
         </div>
       </li>
     </ul>
@@ -62,55 +47,30 @@
     </div>
   </div>
 
-  <!-- ADD TODO MODAL -->
   <div class="modal-overlay" *ngIf="showAddDialog" (click)="closeAddDialog()">
     <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <h3>{{ editingTodo ? 'Görevi Düzenle' : 'Yeni Görev Ekle' }}</h3>
         <button class="close-btn" (click)="closeAddDialog()">×</button>
       </div>
-      
       <form (ngSubmit)="onSubmit()" #todoForm="ngForm" class="modal-form">
         <div class="form-group">
           <label for="title">Başlık *</label>
-          <input 
-            type="text" 
-            id="title"
-            name="title"
-            [(ngModel)]="newTodo.title"
-            placeholder="Görev başlığı"
-            class="form-input"
-            required
-            #titleInput>
+          <input type="text" id="title" name="title" [(ngModel)]="newTodo.title" placeholder="Görev başlığı" class="form-input" required #titleInput>
         </div>
-        
         <div class="form-group">
           <label for="description">Açıklama</label>
-          <textarea 
-            id="description"
-            name="description"
-            [(ngModel)]="newTodo.description"
-            placeholder="Görev açıklaması (opsiyonel)"
-            class="form-textarea"
-            rows="3"></textarea>
+          <textarea id="description" name="description" [(ngModel)]="newTodo.description" placeholder="Görev açıklaması (opsiyonel)" class="form-textarea" rows="3"></textarea>
         </div>
-        
         <div class="form-group" *ngIf="editingTodo">
           <label class="checkbox-label">
-            <input 
-              type="checkbox"
-              name="isCompleted"
-              [(ngModel)]="newTodo.isCompleted"
-              class="form-checkbox">
+            <input type="checkbox" name="isCompleted" [(ngModel)]="newTodo.isCompleted" class="form-checkbox">
             <span class="checkmark"></span>
             Tamamlandı olarak işaretle
           </label>
         </div>
-        
         <div class="modal-actions">
-          <button type="button" class="btn-cancel" (click)="closeAddDialog()">
-            ❌ İptal
-          </button>
+          <button type="button" class="btn-cancel" (click)="closeAddDialog()">❌ İptal</button>
           <button type="submit" class="btn-save" [class.loading]="loading">
             <span *ngIf="loading">💾 Kaydediliyor...</span>
             <span *ngIf="!loading">{{ editingTodo ? '✅ Güncelle' : '➕ Ekle' }}</span>

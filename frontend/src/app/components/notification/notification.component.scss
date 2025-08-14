@@ -1,10 +1,22 @@
-/* Universal Notification Styles */
+$bg-dark: #1a1a1a;
+$bg-darker: #2a2a2a;
+$border-color: #444444;
+$text-light: #e5e7eb;
+
+$success-start: #10b981;
+$success-end: #059669;
+$error-start: #ef4444;
+$error-end: #dc2626;
+$warning-start: #f59e0b;
+$warning-end: #d97706;
+$info-start: #3b82f6;
+$info-end: #2563eb;
+$confirm-start: #6366f1;
+$confirm-end: #4f46e5;
+
 .notification-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(8px);
   display: flex;
@@ -16,39 +28,36 @@
 }
 
 .notification-modal {
-  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+  background: linear-gradient(135deg, $bg-darker 0%, $bg-dark 100%);
   border-radius: 16px;
   overflow: hidden;
   width: 100%;
   max-width: 450px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-  border: 1px solid #444444;
+  border: 1px solid $border-color;
 }
 
-/* Header Styles by Type */
 .notification-header {
   padding: 20px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   color: white;
-  
+
   .header-content {
     display: flex;
     align-items: center;
     gap: 12px;
   }
-  
-  .notification-icon {
-    font-size: 1.5rem;
-  }
-  
+
+  .notification-icon { font-size: 1.5rem; }
+
   h3 {
     margin: 0;
     font-size: 1.25rem;
     font-weight: 600;
   }
-  
+
   .close-btn {
     background: none;
     border: none;
@@ -58,44 +67,26 @@
     padding: 4px;
     border-radius: 4px;
     transition: background 0.2s ease;
-    
-    &:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
+
+    &:hover { background: rgba(255, 255, 255, 0.1); }
   }
 }
 
-/* Header Colors by Type */
-.header-success {
-  background: linear-gradient(135deg, #10b981, #059669);
-}
+.header-success   { background: linear-gradient(135deg, $success-start, $success-end); }
+.header-error     { background: linear-gradient(135deg, $error-start, $error-end); }
+.header-warning   { background: linear-gradient(135deg, $warning-start, $warning-end); }
+.header-info      { background: linear-gradient(135deg, $info-start, $info-end); }
+.header-confirm   { background: linear-gradient(135deg, $confirm-start, $confirm-end); }
 
-.header-error {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
-}
-
-.header-warning {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-}
-
-.header-info {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-}
-
-.header-confirm {
-  background: linear-gradient(135deg, #6366f1, #4f46e5);
-}
-
-/* Body */
 .notification-body {
   padding: 24px;
-  background: #2a2a2a;
-  
+  background: $bg-darker;
+
   .notification-message {
-    color: #e5e7eb;
+    color: $text-light;
     font-size: 1rem;
     line-height: 1.5;
-    margin: 0 0 1rem 0;
+    margin: 0 0 1rem;
     text-align: center;
   }
 }
@@ -104,17 +95,16 @@
   background: rgba(60, 60, 60, 0.8);
   padding: 12px;
   border-radius: 8px;
-  border-left: 4px solid #6366f1;
+  border-left: 4px solid $confirm-start;
   margin-top: 1rem;
   text-align: center;
-  
+
   strong {
-    color: #a5b4fc;
+    color: lighten($confirm-start, 20%);
     font-size: 0.9rem;
   }
 }
 
-/* Auto-close Progress Bar */
 .progress-container {
   margin-top: 1rem;
   background: rgba(60, 60, 60, 0.5);
@@ -125,7 +115,7 @@
 
 .progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, #10b981, #059669);
+  background: linear-gradient(90deg, $success-start, $success-end);
   border-radius: 2px;
   animation: progressShrink linear;
   transform-origin: left;
@@ -136,14 +126,13 @@
   to { transform: scaleX(0); }
 }
 
-/* Actions */
 .notification-actions {
   padding: 20px 24px;
-  background: #2a2a2a;
-  border-top: 1px solid #444444;
+  background: $bg-darker;
+  border-top: 1px solid $border-color;
   display: flex;
   gap: 12px;
-  
+
   .btn {
     flex: 1;
     padding: 12px;
@@ -154,61 +143,53 @@
     transition: all 0.2s ease;
     font-size: 0.9rem;
   }
-  
+
   .btn-cancel {
-    background: #444444;
-    color: #e5e7eb;
-    border: 1px solid #555555;
-    
+    background: $border-color;
+    color: $text-light;
+    border: 1px solid darken($border-color, 5%);
     &:hover {
-      background: #555555;
-      border-color: #666666;
+      background: darken($border-color, 5%);
+      border-color: darken($border-color, 10%);
     }
   }
-  
+
   .btn-confirm {
     color: white;
-    
+
     &.btn-success {
-      background: linear-gradient(135deg, #10b981, #059669);
-      border: 1px solid #10b981;
-      
+      background: linear-gradient(135deg, $success-start, $success-end);
+      border: 1px solid $success-start;
       &:hover {
-        background: linear-gradient(135deg, #059669, #047857);
+        background: linear-gradient(135deg, $success-end, #047857);
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
       }
     }
-    
     &.btn-error {
-      background: linear-gradient(135deg, #ef4444, #dc2626);
-      border: 1px solid #ef4444;
-      
+      background: linear-gradient(135deg, $error-start, $error-end);
+      border: 1px solid $error-start;
       &:hover {
-        background: linear-gradient(135deg, #dc2626, #b91c1c);
+        background: linear-gradient(135deg, $error-end, #b91c1c);
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
       }
     }
-    
     &.btn-warning {
-      background: linear-gradient(135deg, #f59e0b, #d97706);
-      border: 1px solid #f59e0b;
-      
+      background: linear-gradient(135deg, $warning-start, $warning-end);
+      border: 1px solid $warning-start;
       &:hover {
-        background: linear-gradient(135deg, #d97706, #b45309);
+        background: linear-gradient(135deg, $warning-end, #b45309);
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
       }
     }
-    
     &.btn-info,
     &.btn-confirm {
-      background: linear-gradient(135deg, #3b82f6, #2563eb);
-      border: 1px solid #3b82f6;
-      
+      background: linear-gradient(135deg, $info-start, $info-end);
+      border: 1px solid $info-start;
       &:hover {
-        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        background: linear-gradient(135deg, $info-end, #1d4ed8);
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
       }
@@ -216,13 +197,11 @@
   }
 }
 
-/* Animations */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
-/* Toast Notifications (non-modal) */
 .notification-overlay.notification-success:not(.notification-confirm),
 .notification-overlay.notification-info:not(.notification-confirm),
 .notification-overlay.notification-warning:not(.notification-confirm) {
@@ -232,7 +211,7 @@
   justify-content: flex-end;
   padding: 20px;
   pointer-events: none;
-  
+
   .notification-modal {
     pointer-events: all;
     max-width: 350px;
@@ -252,18 +231,14 @@
   }
 }
 
-/* Mobile Responsive */
 @media (max-width: 480px) {
   .notification-modal {
     margin: 10px;
     max-height: 80vh;
   }
-  
+
   .notification-actions {
     flex-direction: column;
-    
-    .btn {
-      width: 100%;
-    }
+    .btn { width: 100%; }
   }
 }

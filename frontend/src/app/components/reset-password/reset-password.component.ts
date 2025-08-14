@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../services/auth.service'; // ✅ AuthService kullan
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -11,7 +11,7 @@ import { AuthService } from '../../services/auth.service'; // ✅ AuthService ku
   styleUrls: ['./reset-password.component.scss']
 })
 export class ResetPasswordComponent implements OnInit {
-  @Output() backToLogin = new EventEmitter<void>(); // ✅ Parent'a geri dönüş
+  @Output() backToLogin = new EventEmitter<void>();
 
   resetForm: FormGroup;
   token: string = '';
@@ -22,20 +22,22 @@ export class ResetPasswordComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthService // ✅ AuthService inject et
+    private authService: AuthService
   ) {
-    this.resetForm = this.formBuilder.group({
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', Validators.required]
-    }, { validators: this.passwordMatchValidator });
+    this.resetForm = this.formBuilder.group(
+      {
+        password: ['', [Validators.required, Validators.minLength(6)]],
+        confirmPassword: ['', Validators.required]
+      },
+      { validators: this.passwordMatchValidator }
+    );
   }
 
   ngOnInit(): void {
-    // ✅ URL'den parametreleri al
     const urlParams = new URLSearchParams(window.location.search);
     this.token = urlParams.get('token') || '';
     this.email = urlParams.get('email') || '';
-    
+
     if (!this.token || !this.email) {
       this.error = 'Geçersiz sıfırlama linki';
     }
@@ -48,23 +50,21 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.resetForm.invalid || !this.token || !this.email) {
-      return;
-    }
+    if (this.resetForm.invalid || !this.token || !this.email) return;
 
     this.loading = true;
+    this.message = '';
+    this.error = '';
+
     const { password } = this.resetForm.value;
 
-    // ✅ AuthService kullan
     this.authService.resetPassword(this.email, this.token, password).subscribe({
       next: (response: any) => {
         this.message = response.message || 'Şifreniz başarıyla güncellendi!';
-        setTimeout(() => {
-          this.goBackToLogin();
-        }, 2000);
+        setTimeout(() => this.goBackToLogin(), 2000);
       },
       error: (error) => {
-        this.error = error.error?.message || 'Şifre sıfırlama başarısız';
+        this.error = error?.error?.message || 'Şifre sıfırlama başarısız';
         this.loading = false;
       },
       complete: () => {
@@ -74,6 +74,6 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   goBackToLogin(): void {
-    this.backToLogin.emit(); // ✅ Parent component'e bildirim
+    this.backToLogin.emit();
   }
 }

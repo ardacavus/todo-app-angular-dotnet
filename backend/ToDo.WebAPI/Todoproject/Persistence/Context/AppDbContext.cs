@@ -20,7 +20,6 @@ namespace ToDo.WebAPI.Persistence.Context
                 entity.Property(e => e.Title).IsRequired().HasMaxLength(200);
                 entity.Property(e => e.Description).HasMaxLength(500);
                 entity.Property(e => e.UserId).IsRequired();
-
                 entity.HasOne<User>()
                       .WithMany()
                       .HasForeignKey(e => e.UserId)

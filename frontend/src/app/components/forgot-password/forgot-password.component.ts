@@ -7,8 +7,8 @@ import { AuthService } from '../../services/auth.service';
   selector: 'app-forgot-password',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './forgot-password.component.html',  // Doğru path
-  styleUrls: ['./forgot-password.component.scss']   // Doğru path
+  templateUrl: './forgot-password.component.html',
+  styleUrls: ['./forgot-password.component.scss']
 })
 export class ForgotPasswordComponent {
   @Output() backToLogin = new EventEmitter<void>();
@@ -21,26 +21,28 @@ export class ForgotPasswordComponent {
   constructor(private authService: AuthService) {}
 
   onSubmit() {
-    if (!this.email.trim() || this.isLoading) return;
-    
+    if (this.isLoading || !this.email.trim()) return;
+
     this.isLoading = true;
     this.message = '';
-    
+
     this.authService.forgotPassword(this.email).subscribe({
       next: (response) => {
-        this.message = response.message;
-        this.isSuccess = true;
-        this.isLoading = false;
+        this.handleResponse(response.message, true);
       },
       error: (error) => {
-        this.message = error.error?.message || 'Bir hata oluştu!';
-        this.isSuccess = false;
-        this.isLoading = false;
+        this.handleResponse(error.error?.message || 'Bir hata oluştu!', false);
       }
     });
   }
 
   onBackToLogin() {
     this.backToLogin.emit();
+  }
+
+  private handleResponse(message: string, isSuccess: boolean) {
+    this.message = message;
+    this.isSuccess = isSuccess;
+    this.isLoading = false;
   }
 }

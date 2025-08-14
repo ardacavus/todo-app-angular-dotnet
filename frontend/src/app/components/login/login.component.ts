@@ -1,6 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { finalize } from 'rxjs';
 import { AuthService, LoginRequest } from '../../services/auth.service';
 
 @Component({
@@ -15,46 +16,38 @@ export class LoginComponent {
   @Output() switchToForgotPassword = new EventEmitter<void>();
   @Output() loginSuccess = new EventEmitter<void>();
 
-  user: LoginRequest = {
-    email: '',
-    password: ''
-  };
-
+  user: LoginRequest = { email: '', password: '' };
   showPassword = false;
   isLoading = false;
   errorMessage = '';
 
   constructor(private authService: AuthService) {}
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.isLoading) return;
-    
+
     this.isLoading = true;
     this.errorMessage = '';
-    
-    this.authService.login(this.user).subscribe({
-      next: (response) => {
-        console.log('Giriş başarılı:', response);
-        this.loginSuccess.emit();
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Giriş hatası:', error);
-        this.errorMessage = error.error?.message || 'Giriş işlemi başarısız!';
-        this.isLoading = false;
-      }
-    });
+
+    this.authService.login(this.user)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe({
+        next: () => this.loginSuccess.emit(),
+        error: (error) => {
+          this.errorMessage = error.error?.message || 'Giriş işlemi başarısız!';
+        }
+      });
   }
 
-  togglePasswordVisibility() {
+  togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
   }
 
-  onRegisterClick() {
+  onRegisterClick(): void {
     this.switchToRegister.emit();
   }
 
-  onForgotPasswordClick() {
+  onForgotPasswordClick(): void {
     this.switchToForgotPassword.emit();
   }
 }

@@ -23,44 +23,39 @@ import { NotificationService, NotificationData } from '../../services/notificati
   ]
 })
 export class NotificationComponent implements OnInit, OnDestroy {
-  // ✅ inject() kullan constructor yerine
   private notificationService = inject(NotificationService);
   
   notification: NotificationData | null = null;
   private subscription?: Subscription;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.subscription = this.notificationService.notification$.subscribe(
-      notification => {
-        this.notification = notification;
-      }
+      notification => this.notification = notification
     );
   }
 
-  ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 
   isConfirmType(): boolean {
     return this.notification?.type === 'confirm';
   }
 
-  handleConfirm() {
+  handleConfirm(): void {
     this.notificationService.handleConfirm();
   }
 
-  handleCancel() {
+  handleCancel(): void {
     this.notificationService.handleCancel();
   }
 
-  close() {
+  close(): void {
     this.notificationService.close();
   }
 
-  handleBackdropClick() {
-    if (this.notification?.type !== 'confirm' && this.notification?.type !== 'error') {
+  handleBackdropClick(): void {
+    if (this.notification && !['confirm', 'error'].includes(this.notification.type)) {
       this.close();
     }
   }

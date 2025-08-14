@@ -31,7 +31,7 @@ export interface AuthResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'https://localhost:12187/api/auth'; // ✅ Port'u düzelt
+  private apiUrl = 'https://localhost:12187/api/auth';
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
@@ -44,27 +44,21 @@ export class AuthService {
   }
 
   login(request: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, request)
-      .pipe(
-        tap(response => {
-          localStorage.setItem('token', response.token);
-          localStorage.setItem('user', JSON.stringify(response.user));
-          this.currentUserSubject.next(response.user);
-        })
-      );
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, request).pipe(
+      tap(response => {
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
+        this.currentUserSubject.next(response.user);
+      })
+    );
   }
 
   forgotPassword(email: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/forgot-password`, { email });
   }
 
-  // ✅ URL'yi düzelt - /auth kısmını kaldır
   resetPassword(email: string, token: string, newPassword: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/reset-password`, {
-      email,
-      token,
-      newPassword
-    });
+    return this.http.post(`${this.apiUrl}/reset-password`, { email, token, newPassword });
   }
 
   logout(): void {
@@ -85,7 +79,6 @@ export class AuthService {
   private checkStoredAuth(): void {
     const token = this.getToken();
     const userStr = localStorage.getItem('user');
-    
     if (token && userStr && !this.isTokenExpired(token)) {
       this.currentUserSubject.next(JSON.parse(userStr));
     }

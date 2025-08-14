@@ -21,7 +21,7 @@ namespace ToDo.WebAPI.Todoproject.Application.Commands
             var entity = new Entities.Entity.Todo
             {
                 Title = req.Title.Trim(),
-                Description = string.IsNullOrWhiteSpace(req.Description) ? string.Empty : req.Description!.Trim(), // 👈 NULL DEĞİL EMPTY STRING
+                Description = string.IsNullOrWhiteSpace(req.Description) ? string.Empty : req.Description!.Trim(),
                 IsCompleted = req.IsCompleted,
                 UserId = userId
             };

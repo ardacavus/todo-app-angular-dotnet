@@ -15,7 +15,6 @@
     <app-forgot-password (backToLogin)="showLogin()"></app-forgot-password>
   </div>
 
-  <!-- ✅ YENİ: Reset Password View -->
   <div *ngIf="currentView === 'reset-password'">
     <app-reset-password (backToLogin)="showLogin()"></app-reset-password>
   </div>
@@ -55,4 +54,5 @@
     </footer>
   </div>
 </div>
+
 <app-notification></app-notification>

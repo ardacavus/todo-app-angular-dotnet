@@ -1,47 +1,48 @@
-<!-- Universal Notification Modal -->
-<div class="notification-overlay" *ngIf="notification" 
+<div class="notification-overlay"
+     *ngIf="notification"
      [class]="'notification-' + notification.type"
      (click)="handleBackdropClick()">
-  
-  <div class="notification-modal" 
+
+  <div class="notification-modal"
        [class]="'modal-' + notification.type"
        (click)="$event.stopPropagation()"
-       [@slideIn]>
-    
-    <!-- Header -->
+       [@slideIn]
+       role="dialog"
+       aria-labelledby="notificationTitle"
+       aria-describedby="notificationMessage">
+
     <div class="notification-header" [class]="'header-' + notification.type">
       <div class="header-content">
-        <span class="notification-icon">{{ notification.icon }}</span>
-        <h3>{{ notification.title }}</h3>
+        <span class="notification-icon" aria-hidden="true">{{ notification.icon }}</span>
+        <h3 id="notificationTitle">{{ notification.title }}</h3>
       </div>
-      <button class="close-btn" (click)="close()" *ngIf="!isConfirmType()">×</button>
+      <button *ngIf="!isConfirmType()"
+              class="close-btn"
+              (click)="close()"
+              aria-label="Kapat">×</button>
     </div>
-    
-    <!-- Body -->
+
     <div class="notification-body">
-      <p class="notification-message">{{ notification.message }}</p>
-      
-      <!-- Details (for delete confirmations, etc.) -->
+      <p id="notificationMessage" class="notification-message">{{ notification.message }}</p>
+
       <div class="notification-details" *ngIf="notification.details">
         <strong>"{{ notification.details }}"</strong>
       </div>
-      
-      <!-- Progress bar for auto-close -->
+
       <div class="progress-container" *ngIf="notification.duration && notification.duration > 0">
         <div class="progress-bar" [style.animation-duration.ms]="notification.duration"></div>
       </div>
     </div>
-    
-    <!-- Actions (for confirmations) -->
+
     <div class="notification-actions" *ngIf="isConfirmType()">
-      <button type="button" 
-              class="btn btn-cancel" 
+      <button type="button"
+              class="btn btn-cancel"
               (click)="handleCancel()">
         {{ notification.cancelText || '❌ İptal' }}
       </button>
-      
-      <button type="button" 
-              class="btn btn-confirm" 
+
+      <button type="button"
+              class="btn btn-confirm"
               [class]="'btn-' + notification.type"
               (click)="handleConfirm()">
         {{ notification.confirmText || '✅ Tamam' }}

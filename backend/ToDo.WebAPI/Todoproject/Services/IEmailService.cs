@@ -26,11 +26,9 @@ namespace ToDo.WebAPI.Services
                 var resetLink = $"http://localhost:4200/reset-password?email={email}&token={Uri.EscapeDataString(resetToken)}";
 
                 var emailMessage = new MimeMessage();
-
                 emailMessage.From.Add(new MailboxAddress(
                     _configuration["EmailSettings:SenderName"],
                     _configuration["EmailSettings:SenderEmail"]));
-
                 emailMessage.To.Add(new MailboxAddress("", email));
                 emailMessage.Subject = "Todo App - Şifre Sıfırlama";
 
@@ -95,12 +93,10 @@ Eğer bu talebi siz yapmadıysanız, bu emaili görmezden gelebilirsiniz.
                 await client.ConnectAsync(
                     _configuration["EmailSettings:SmtpServer"],
                     int.Parse(_configuration["EmailSettings:Port"]),
-                    MailKit.Security.SecureSocketOptions.None); // Mailtrap için None
-
+                    MailKit.Security.SecureSocketOptions.None);
                 await client.AuthenticateAsync(
                     _configuration["EmailSettings:SenderEmail"],
                     _configuration["EmailSettings:SenderPassword"]);
-
                 await client.SendAsync(emailMessage);
                 await client.DisconnectAsync(true);
 

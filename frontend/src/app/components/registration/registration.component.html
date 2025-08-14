@@ -5,8 +5,7 @@
       <p>ToDo List uygulamasına hoş geldiniz</p>
     </div>
 
-    <form (ngSubmit)="onSubmit()" #registrationForm="ngForm" class="registration-form">
-
+    <form (ngSubmit)="onSubmit()" #registrationForm="ngForm" class="registration-form" novalidate>
       <div class="form-row">
         <div class="form-group">
           <label for="firstName">Ad</label>
@@ -16,7 +15,8 @@
             name="firstName"
             [(ngModel)]="user.firstName"
             required
-            placeholder="Adınız">
+            placeholder="Adınız"
+            aria-required="true">
         </div>
         
         <div class="form-group">
@@ -27,7 +27,8 @@
             name="lastName"
             [(ngModel)]="user.lastName"
             required
-            placeholder="Soyadınız">
+            placeholder="Soyadınız"
+            aria-required="true">
         </div>
       </div>
 
@@ -39,7 +40,8 @@
           name="email"
           [(ngModel)]="user.email"
           required
-          placeholder="ornek@email.com">
+          placeholder="ornek@email.com"
+          aria-required="true">
       </div>
 
       <div class="form-group">
@@ -52,12 +54,14 @@
             [(ngModel)]="user.password"
             required
             minlength="6"
-            placeholder="En az 6 karakter">
+            placeholder="En az 6 karakter"
+            aria-required="true">
           <button 
             type="button" 
             class="toggle-password"
-            (click)="togglePasswordVisibility()">
-            {{showPassword ? '🙈' : '👁️'}}
+            (click)="togglePasswordVisibility()"
+            aria-label="Şifre görünürlüğünü değiştir">
+            {{ showPassword ? '🙈' : '👁️' }}
           </button>
         </div>
       </div>
@@ -71,12 +75,14 @@
             name="confirmPassword"
             [(ngModel)]="user.confirmPassword"
             required
-            placeholder="Şifrenizi tekrar girin">
+            placeholder="Şifrenizi tekrar girin"
+            aria-required="true">
           <button 
             type="button" 
             class="toggle-password"
-            (click)="toggleConfirmPasswordVisibility()">
-            {{showConfirmPassword ? '🙈' : '👁️'}}
+            (click)="toggleConfirmPasswordVisibility()"
+            aria-label="Şifre tekrar görünürlüğünü değiştir">
+            {{ showConfirmPassword ? '🙈' : '👁️' }}
           </button>
         </div>
       </div>
@@ -91,7 +97,10 @@
     </form>
 
     <div class="card-footer">
-      <p>Zaten hesabınız var mı? <a href="#" class="login-link" (click)="onLoginClick(); $event.preventDefault()">Giriş Yap</a></p>
+      <p>
+        Zaten hesabınız var mı?
+        <a href="#" class="login-link" (click)="onLoginClick(); $event.preventDefault()">Giriş Yap</a>
+      </p>
     </div>
   </div>
   

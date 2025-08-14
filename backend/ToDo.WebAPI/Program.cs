@@ -16,11 +16,9 @@ using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// DbContext
 builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Identity
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
     options.Password.RequireDigit = false;
@@ -32,10 +30,8 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 .AddEntityFrameworkStores<AppDbContext>()
 .AddDefaultTokenProviders();
 
-// Authorization
 builder.Services.AddAuthorization();
 
-// JWT Authentication
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -55,10 +51,8 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Services
 builder.Services.AddScoped<IEmailService, EmailService>();
 
-// Dependency Injection
 builder.Services.AddScoped<IToDoRepository, ToDoRepository>();
 builder.Services.AddScoped<ICreateToDoHandler, CreateToDoHandler>();
 builder.Services.AddScoped<IUpdateToDoHandler, UpdateToDoHandler>();
@@ -66,11 +60,9 @@ builder.Services.AddScoped<IDeleteToDoHandler, DeleteToDoHandler>();
 builder.Services.AddScoped<IGetAllToDosHandler, GetAllToDosHandler>();
 builder.Services.AddScoped<IGetToDoByIdHandler, GetToDoByIdHandler>();
 
-// Swagger servisleri
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// CORS ekle
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
@@ -81,20 +73,16 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Swagger middleware
 app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
-// CORS aktif et
 app.UseCors("AllowFrontend");
 
-// Authentication & Authorization
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Auth endpoints
 app.MapPost("/api/auth/register", async (RegisterDto model, UserManager<User> userManager) =>
 {
     var existingUser = await userManager.FindByEmailAsync(model.Email);
@@ -187,10 +175,10 @@ app.MapPost("/api/auth/forgot-password", async (
     logger.LogInformation($"User found: {user.FirstName} {user.LastName}");
 
     var today = DateTime.UtcNow.Date;
-    if (user.LastPasswordResetRequest?.Date == today && user.PasswordResetRequestCount >= 3) // 1'den 3'e deðiþtir
+    if (user.LastPasswordResetRequest?.Date == today && user.PasswordResetRequestCount >= 3)
     {
         logger.LogWarning($"Rate limit exceeded for user: {model.Email}");
-        return Results.BadRequest(new { message = "Günde sadece 3 kere þifre sýfýrlama talebinde bulunabilirsiniz." }); // 1'den 3'e deðiþtir
+        return Results.BadRequest(new { message = "Günde sadece 3 kere þifre sýfýrlama talebinde bulunabilirsiniz." });
     }
 
     if (user.LastPasswordResetRequest?.Date != today)
@@ -201,7 +189,7 @@ app.MapPost("/api/auth/forgot-password", async (
     user.PasswordResetRequestCount++;
     await userManager.UpdateAsync(user);
 
-    logger.LogInformation($"Password reset request count: {user.PasswordResetRequestCount}/3"); // Debug için ekle
+    logger.LogInformation($"Password reset request count: {user.PasswordResetRequestCount}/3");
 
     logger.LogInformation("Generating password reset token...");
     var resetToken = await userManager.GeneratePasswordResetTokenAsync(user);
@@ -245,7 +233,6 @@ app.MapPost("/api/auth/reset-password", async (
     return Results.Ok(new { message = "Þifreniz baþarýyla sýfýrlandý." });
 });
 
-// Todo endpoints
 var api = app.MapGroup("/api/todo").RequireAuthorization();
 
 api.MapGet("/", async (IGetAllToDosHandler h, HttpContext httpContext, CancellationToken ct) =>

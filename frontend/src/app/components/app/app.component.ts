@@ -1,22 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TodoListComponent } from './components/todo-list/todo-list.component';
-import { RegistrationComponent } from './components/registration/registration.component';
-import { LoginComponent } from './components/login/login.component';
-import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
-import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
-import { NotificationComponent } from './components/notification/notification.component';
-import { AuthService, User } from './services/auth.service';
-import { NotificationService } from './services/notification.service';
+import { TodoListComponent } from '../todo-list/todo-list.component';
+import { RegistrationComponent } from '../registration/registration.component';
+import { LoginComponent } from '../login/login.component';
+import { ForgotPasswordComponent } from '../forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from '../reset-password/reset-password.component';
+import { NotificationComponent } from '../notification/notification.component';
+import { AuthService, User } from '../../services/auth.service';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
-    CommonModule, 
-    TodoListComponent, 
-    RegistrationComponent, 
-    LoginComponent, 
+    CommonModule,
+    TodoListComponent,
+    RegistrationComponent,
+    LoginComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
     NotificationComponent
@@ -26,7 +26,7 @@ import { NotificationService } from './services/notification.service';
 })
 export class AppComponent implements OnInit {
   title = 'ToDo App';
-  currentView = 'login';
+  currentView: 'login' | 'register' | 'forgot-password' | 'reset-password' | 'todo' = 'login';
   isLoggedIn = false;
   currentUser: User | null = null;
   showUserDropdown = false;
@@ -37,29 +37,21 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    console.log('APP COMPONENT ÇALIŞTI');
-    
-    // URL'den reset-password parametrelerini kontrol et
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('token') && urlParams.has('email')) {
       this.showResetPassword();
-      return; // AuthService check'ini atla
+      return;
     }
-    
+
     this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
       this.isLoggedIn = !!user;
-      if (this.isLoggedIn) {
-        this.currentView = 'todo';
-      } else {
-        this.currentView = 'login';
-      }
+      this.currentView = this.isLoggedIn ? 'todo' : 'login';
     });
   }
 
   showLogin() {
     this.currentView = 'login';
-    // URL'yi temizle
     window.history.replaceState({}, document.title, window.location.pathname);
   }
 
@@ -80,18 +72,15 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
-    // Custom confirmation modal instead of browser confirm
     this.notificationService.confirmLogout(
       () => this.executeLogout(),
-      () => this.closeDropdown() // Optional: close dropdown on cancel
+      () => this.closeDropdown()
     );
   }
 
   private executeLogout() {
     this.authService.logout();
     this.showUserDropdown = false;
-    
-    // Success notification
     this.notificationService.success(
       'Çıkış Yapıldı',
       'Başarıyla çıkış yaptınız. Tekrar görüşmek üzere!'
@@ -107,9 +96,6 @@ export class AppComponent implements OnInit {
   }
 
   getUserInitial(): string {
-    if (this.currentUser?.firstName) {
-      return this.currentUser.firstName.charAt(0).toUpperCase();
-    }
-    return 'U';
+    return this.currentUser?.firstName?.charAt(0).toUpperCase() || 'U';
   }
 }
