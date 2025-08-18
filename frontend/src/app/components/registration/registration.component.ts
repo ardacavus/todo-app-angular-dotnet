@@ -47,7 +47,7 @@ export class RegistrationComponent {
       next: () => {
         this.isLoading = false;
         this.notificationService.success(
-          'Kayıt Başarılı!',
+          '🎉 Kayıt Başarılı!',
           `Hoş geldiniz ${this.user.firstName}! Şimdi giriş yapabilirsiniz.`,
           3000
         );
@@ -83,31 +83,35 @@ export class RegistrationComponent {
 
   private validateInputs(): boolean {
     if (!this.user.firstName.trim()) {
-      this.notificationService.warning('Eksik Bilgi', 'Lütfen adınızı girin.');
+      this.notificationService.warning('❌ Eksik Bilgi', 'Lütfen adınızı girin.');
       return false;
     }
     if (!this.user.lastName.trim()) {
-      this.notificationService.warning('Eksik Bilgi', 'Lütfen soyadınızı girin.');
+      this.notificationService.warning('❌ Eksik Bilgi', 'Lütfen soyadınızı girin.');
       return false;
     }
     if (!this.user.email.trim()) {
-      this.notificationService.warning('Eksik Bilgi', 'Lütfen email adresinizi girin.');
+      this.notificationService.warning('❌ Eksik Bilgi', 'Lütfen email adresinizi girin.');
       return false;
     }
     if (!this.isValidEmail(this.user.email)) {
-      this.notificationService.warning('Geçersiz Email', 'Lütfen geçerli bir email adresi girin.');
+      this.notificationService.warning('❌ Geçersiz Email', 'Lütfen geçerli bir email adresi girin.');
       return false;
     }
     if (!this.user.password.trim()) {
-      this.notificationService.warning('Eksik Bilgi', 'Lütfen bir şifre girin.');
+      this.notificationService.warning('❌ Eksik Bilgi', 'Lütfen bir şifre girin.');
       return false;
     }
-    if (this.user.password.length < 6) {
-      this.notificationService.warning('Zayıf Şifre', 'Şifre en az 6 karakter olmalıdır.');
+    if (this.user.password.length < 8) {
+      this.notificationService.warning('❌ Zayıf Şifre', 'Şifre en az 8 karakter olmalıdır.');
+      return false;
+    }
+    if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(this.user.password)) {
+      this.notificationService.warning('❌ Zayıf Şifre', 'Şifre en az bir büyük harf, bir küçük harf ve bir rakam içermelidir.');
       return false;
     }
     if (this.user.password !== this.user.confirmPassword) {
-      this.notificationService.warning('Şifre Uyumsuzluğu', 'Girdiğiniz şifreler eşleşmiyor. Lütfen kontrol edin.');
+      this.notificationService.warning('❌ Şifre Uyumsuzluğu', 'Girdiğiniz şifreler eşleşmiyor. Lütfen kontrol edin.');
       return false;
     }
     return true;
@@ -119,17 +123,19 @@ export class RegistrationComponent {
     let errorDetails = '';
 
     if (error.status === 400) {
-      if (error.error?.message?.includes('email')) {
-        errorTitle = 'Email Zaten Kullanımda';
-        errorMessage = 'Bu email adresi ile daha önce kayıt olunmuş. Giriş yapmayı deneyin.';
+      if (error.error?.message?.includes('zaten kullanımda') || 
+          error.error?.message?.includes('kayıt olunmuş') ||
+          error.error?.message?.includes('kullanımda')) {
+        errorTitle = '📧 Email Zaten Kayıtlı';
+        errorMessage = 'Bu email adresi ile daha önce hesap oluşturulmuş. Giriş yapmayı deneyin.';
       } else {
         errorMessage = error.error?.message || 'Girdiğiniz bilgilerde bir sorun var.';
       }
     } else if (error.status === 409) {
-      errorTitle = 'Kullanıcı Zaten Mevcut';
-      errorMessage = 'Bu email adresi zaten kullanımda.';
+      errorTitle = '📧 Email Zaten Kayıtlı';
+      errorMessage = 'Bu email adresi zaten kullanımda. Farklı bir email deneyin.';
     } else if (error.status === 0) {
-      errorTitle = 'Bağlantı Hatası';
+      errorTitle = '🌐 Bağlantı Hatası';
       errorMessage = 'Sunucuya bağlanılamadı. İnternet bağlantınızı kontrol edin.';
     } else {
       errorDetails = error.error?.message || error.message;

@@ -1,4 +1,4 @@
-﻿using ToDo.WebAPI.Application.Interfaces.Repositories;
+﻿using ToDo.WebAPI.Todoproject.Entities.Interfaces;
 
 namespace ToDo.WebAPI.Todoproject.Application.Commands
 {

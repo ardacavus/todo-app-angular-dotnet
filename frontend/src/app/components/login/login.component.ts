@@ -34,7 +34,7 @@ export class LoginComponent {
       .subscribe({
         next: () => this.loginSuccess.emit(),
         error: (error) => {
-          this.errorMessage = error.error?.message || 'Giriş işlemi başarısız!';
+          this.handleLoginError(error);
         }
       });
   }
@@ -49,5 +49,29 @@ export class LoginComponent {
 
   onForgotPasswordClick(): void {
     this.switchToForgotPassword.emit();
+  }
+
+  private handleLoginError(error: any): void {
+    if (error.status === 400) {
+      const message = error.error?.message || '';
+      
+      if (message.includes('kayıtlı değil') || 
+          message.includes('hesap oluşturun')) {
+        this.errorMessage = '📧 Bu email adresi kayıtlı değil! Önce hesap oluşturun.';
+      } else if (message.includes('Şifre hatalı') ||
+                 message.includes('şifrenizi kontrol')) {
+        this.errorMessage = '🔒 Şifre hatalı! Lütfen şifrenizi kontrol edin.';
+      } else if (message.includes('Email veya şifre hatalı')) {
+        this.errorMessage = '🔒 Email veya şifre hatalı! Lütfen bilgilerinizi kontrol edin.';
+      } else {
+        this.errorMessage = message || 'Giriş işlemi başarısız!';
+      }
+    } else if (error.status === 0) {
+      this.errorMessage = '🌐 Sunucuya bağlanılamadı. İnternet bağlantınızı kontrol edin.';
+    } else if (error.status === 429) {
+      this.errorMessage = '⏰ Çok fazla deneme! Lütfen bir dakika bekleyin.';
+    } else {
+      this.errorMessage = '❌ Giriş işlemi sırasında bir hata oluştu!';
+    }
   }
 }

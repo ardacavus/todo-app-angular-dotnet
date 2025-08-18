@@ -1,4 +1,4 @@
-﻿using ToDo.WebAPI.Application.Interfaces.Repositories;
+﻿using ToDo.WebAPI.Todoproject.Entities.Interfaces;
 using ToDo.WebAPI.Todoproject.Entities.ItemDto;
 
 namespace ToDo.WebAPI.Todoproject.Application.Queries

@@ -1,6 +1,6 @@
 ﻿using ToDo.WebAPI.Todoproject.Entities.Entity;
 
-namespace ToDo.WebAPI.Application.Interfaces.Repositories
+namespace ToDo.WebAPI.Todoproject.Entities.Interfaces
 {
     public interface IToDoRepository
     {

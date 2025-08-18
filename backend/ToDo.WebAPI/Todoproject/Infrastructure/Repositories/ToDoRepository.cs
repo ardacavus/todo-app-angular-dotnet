@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ToDo.WebAPI.Application.Interfaces.Repositories;
 using ToDo.WebAPI.Persistence.Context;
 using ToDo.WebAPI.Todoproject.Entities.Entity;
+using ToDo.WebAPI.Todoproject.Entities.Interfaces;
 
 namespace ToDo.WebAPI.Infrastructure.Repositories
 {
