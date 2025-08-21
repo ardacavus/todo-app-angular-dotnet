@@ -15,6 +15,7 @@ export class LoginComponent {
   @Output() switchToRegister = new EventEmitter<void>();
   @Output() switchToForgotPassword = new EventEmitter<void>();
   @Output() loginSuccess = new EventEmitter<void>();
+  @Output() backToLanding = new EventEmitter<void>();
 
   user: LoginRequest = { email: '', password: '' };
   showPassword = false;
@@ -49,6 +50,10 @@ export class LoginComponent {
 
   onForgotPasswordClick(): void {
     this.switchToForgotPassword.emit();
+  }
+
+  onBackToLanding(): void {
+    this.backToLanding.emit();
   }
 
   private handleLoginError(error: any): void {

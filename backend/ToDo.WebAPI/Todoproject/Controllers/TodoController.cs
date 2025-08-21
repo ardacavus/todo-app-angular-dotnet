@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using System.Security.Claims;
 using ToDo.WebAPI.Todoproject.Application.Commands;
 using ToDo.WebAPI.Todoproject.Application.Queries;
@@ -10,6 +11,7 @@ namespace ToDo.WebAPI.Todoproject.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
+    [EnableRateLimiting("GeneralPolicy")]
     public class TodoController : ControllerBase
     {
         private readonly IGetAllToDosHandler _getAllToDosHandler;

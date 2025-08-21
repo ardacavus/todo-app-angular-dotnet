@@ -90,12 +90,6 @@ export class AuthService {
   }
 
   logout(): void {
-    // Backend'e logout isteği gönder (isteğe bağlı)
-    this.http.post(`${this.apiUrl}/logout`, {}).pipe(
-      catchError(() => of(null)) // Hata olursa da logout yap
-    ).subscribe();
-    
-    // Local data'yı temizle
     this.clearAuthData();
   }
 

@@ -6,8 +6,11 @@ import { LoginComponent } from '../login/login.component';
 import { ForgotPasswordComponent } from '../forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from '../reset-password/reset-password.component';
 import { NotificationComponent } from '../notification/notification.component';
+import { LandingComponent } from '../landing/landing.component';
+import { LoadingComponent } from '../loading/loading.component';
 import { AuthService, User } from '../../services/auth.service';
 import { NotificationService } from '../../services/notification.service';
+import { LoadingService } from '../../services/loading.service';
 
 @Component({
   selector: 'app-root',
@@ -19,21 +22,24 @@ import { NotificationService } from '../../services/notification.service';
     LoginComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
-    NotificationComponent
+    NotificationComponent,
+    LandingComponent,
+    LoadingComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
   title = 'ToDo App';
-  currentView: 'login' | 'register' | 'forgot-password' | 'reset-password' | 'todo' = 'login';
+  currentView: 'landing' | 'login' | 'register' | 'forgot-password' | 'reset-password' | 'todo' = 'landing';
   isLoggedIn = false;
   currentUser: User | null = null;
   showUserDropdown = false;
 
   constructor(
     private authService: AuthService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private loadingService: LoadingService
   ) {}
 
   ngOnInit() {
@@ -43,24 +49,48 @@ export class AppComponent implements OnInit {
       return;
     }
 
+    // AuthService'ten user durumunu dinle
     this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
       this.isLoggedIn = !!user;
-      this.currentView = this.isLoggedIn ? 'todo' : 'login';
+      
+      // User durumuna göre view'ı güncelle
+      if (user) {
+        // Kullanıcı giriş yapmış, todo sayfasına git
+        this.currentView = 'todo';
+      } else {
+        // Kullanıcı çıkış yapmış veya hiç giriş yapmamış, landing'e git
+        if (this.currentView === 'todo') {
+          // Sadece todo sayfasındayken landing'e git
+          this.currentView = 'landing';
+        }
+      }
     });
   }
 
   showLogin() {
-    this.currentView = 'login';
-    window.history.replaceState({}, document.title, window.location.pathname);
+    this.loadingService.showForDuration(600).then(() => {
+      this.currentView = 'login';
+      window.history.replaceState({}, document.title, window.location.pathname);
+    });
+  }
+
+  showLanding() {
+    this.loadingService.showForDuration(500).then(() => {
+      this.currentView = 'landing';
+    });
   }
 
   showRegister() {
-    this.currentView = 'register';
+    this.loadingService.showForDuration(600).then(() => {
+      this.currentView = 'register';
+    });
   }
 
   showForgotPassword() {
-    this.currentView = 'forgot-password';
+    this.loadingService.showForDuration(500).then(() => {
+      this.currentView = 'forgot-password';
+    });
   }
 
   showResetPassword() {
@@ -68,7 +98,9 @@ export class AppComponent implements OnInit {
   }
 
   showTodo() {
-    this.currentView = 'todo';
+    this.loadingService.showForDuration(700).then(() => {
+      this.currentView = 'todo';
+    });
   }
 
   logout() {
@@ -79,12 +111,20 @@ export class AppComponent implements OnInit {
   }
 
   private executeLogout() {
-    this.authService.logout();
-    this.showUserDropdown = false;
-    this.notificationService.success(
-      'Çıkış Yapıldı',
-      'Başarıyla çıkış yaptınız. Tekrar görüşmek üzere!'
-    );
+    // Loading ekranı göster
+    this.loadingService.showForDuration(800).then(() => {
+      // Auth service'ten logout çağır
+      this.authService.logout();
+      
+      // Dropdown'u kapat
+      this.showUserDropdown = false;
+      
+      // Başarı mesajı göster
+      this.notificationService.success(
+        'Çıkış Yapıldı',
+        'Başarıyla çıkış yaptınız. Tekrar görüşmek üzere!'
+      );
+    });
   }
 
   toggleUserDropdown() {

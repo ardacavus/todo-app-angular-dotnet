@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
 import { TodoService } from '../../services/todo.service';
 import { NotificationService } from '../../services/notification.service';
 import { Todo, CreateTodoRequest, UpdateTodoRequest } from '../../models/todo';
@@ -10,7 +11,7 @@ type Filter = 'all' | 'active' | 'completed';
 @Component({
   selector: 'app-todo-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CdkDrag, CdkDropList],
   templateUrl: './todo-list.component.html',
   styleUrls: ['./todo-list.component.scss']
 })
@@ -55,6 +56,23 @@ export class TodoListComponent implements OnInit, AfterViewInit {
     if (this.filter === 'active') return 'Tüm görevlerin tamamlanmış! 🎉';
     if (this.filter === 'completed') return 'Henüz tamamlanmış görev yok.';
     return 'İlk görevini ekleyerek başla!';
+  }
+
+  onTodoDrop(event: any): void {
+    // Sadece gerçekten farklı pozisyona taşındıysa işlem yap
+    if (event.previousIndex !== event.currentIndex) {
+      const updatedTodos = [...this.todos];
+      this.moveItemInArray(updatedTodos, event.previousIndex, event.currentIndex);
+      this.todos = updatedTodos;
+      
+      // Bildirim kaldırıldı - sessizce sıralamayı güncelle
+    }
+  }
+
+  private moveItemInArray(array: any[], fromIndex: number, toIndex: number): void {
+    const element = array[fromIndex];
+    array.splice(fromIndex, 1);
+    array.splice(toIndex, 0, element);
   }
 
   openAddDialog(): void {
@@ -218,7 +236,6 @@ export class TodoListComponent implements OnInit, AfterViewInit {
   }
 
   private notifyError(title: string, message: string, err: any): void {
-    // Tek bir noktadan hata bildirimi ve log
     console.error(`${title}:`, err);
     this.notificationService.error(title, message, err?.error?.message || err?.message);
   }

@@ -1,14 +1,25 @@
 <div class="app-container">
+  <div *ngIf="currentView === 'landing'">
+    <app-landing 
+      (showLogin)="showLogin()"
+      (showRegister)="showRegister()">
+    </app-landing>
+  </div>
+
   <div *ngIf="currentView === 'login'">
     <app-login 
       (switchToRegister)="showRegister()"
       (switchToForgotPassword)="showForgotPassword()"
-      (loginSuccess)="showTodo()">
+      (loginSuccess)="showTodo()"
+      (backToLanding)="showLanding()">
     </app-login>
   </div>
 
   <div *ngIf="currentView === 'register'">
-    <app-registration (switchToLogin)="showLogin()"></app-registration>
+    <app-registration 
+      (switchToLogin)="showLogin()"
+      (backToLanding)="showLanding()">
+    </app-registration>
   </div>
 
   <div *ngIf="currentView === 'forgot-password'">
@@ -34,12 +45,12 @@
             </div>
             <div class="dropdown-divider"></div>
             <button class="dropdown-item" (click)="logout()">
-              🚪 Çıkış Yap
+              Çıkış Yap
             </button>
           </div>
         </div>
       </div>
-      <h1>📝 ToDo List App</h1>
+      <h1>ToDo List App</h1>
     </header>
     
     <main class="app-main">
@@ -55,4 +66,5 @@
   </div>
 </div>
 
+<app-loading></app-loading>
 <app-notification></app-notification>

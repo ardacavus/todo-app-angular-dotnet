@@ -20,27 +20,42 @@
       </div>
     </div>
 
-    <ul class="list-group">
-      <li *ngFor="let todo of filteredTodos()" class="list-group-item" [class.completed]="todo.isCompleted">
-        <div class="left">
-          <button class="check" (click)="toggleTodoCompletion(todo, $event)" aria-label="Tamamla/geri al">
-            {{ todo.isCompleted ? '✓' : '' }}
-          </button>
-          <div class="texts">
-            <strong>{{ todo.title }}</strong>
-            <span *ngIf="todo.description"> — {{ todo.description }}</span>
-          </div>
+    <ul class="list-group" 
+        cdkDropList 
+        (cdkDropListDropped)="onTodoDrop($event)"
+        cdkDropListLockAxis="y">
+      <li *ngFor="let todo of filteredTodos()" 
+          class="list-group-item" 
+          [class.completed]="todo.isCompleted"
+          cdkDrag>
+        
+        <div class="drag-handle" 
+             cdkDragHandle 
+             title="Sürükleyerek sırayı değiştir">
+          <span class="handle-dots">⋮⋮</span>
         </div>
-        <div class="actions">
-          <button class="btn-edit" (click)="editTodo(todo, $event)" title="Düzenle"><span>✏️</span></button>
-          <button class="btn-delete" (click)="deleteTodo(todo.id, $event)" title="Sil"><span>🗑️</span></button>
+        
+        <div class="todo-content">
+          <div class="left">
+            <button class="check" (click)="toggleTodoCompletion(todo, $event)" aria-label="Tamamla/geri al">
+              {{ todo.isCompleted ? '✓' : '' }}
+            </button>
+            <div class="texts">
+              <strong>{{ todo.title }}</strong>
+              <span *ngIf="todo.description"> — {{ todo.description }}</span>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn-edit" (click)="editTodo(todo, $event)" title="Düzenle"><span>✏️</span></button>
+            <button class="btn-delete" (click)="deleteTodo(todo.id, $event)" title="Sil"><span>🗑️</span></button>
+          </div>
         </div>
       </li>
     </ul>
 
     <div *ngIf="!filteredTodos().length" class="empty">
       <div class="empty-content">
-        <div class="empty-icon">📝</div>
+        <div class="empty-icon">📋</div>
         <h3>Henüz görev yok</h3>
         <p>{{ getEmptyMessage() }}</p>
       </div>
@@ -70,7 +85,7 @@
           </label>
         </div>
         <div class="modal-actions">
-          <button type="button" class="btn-cancel" (click)="closeAddDialog()">❌ İptal</button>
+          <button type="button" class="btn-cancel" (click)="closeAddDialog()">⌫ İptal</button>
           <button type="submit" class="btn-save" [class.loading]="loading">
             <span *ngIf="loading">💾 Kaydediliyor...</span>
             <span *ngIf="!loading">{{ editingTodo ? '✅ Güncelle' : '➕ Ekle' }}</span>

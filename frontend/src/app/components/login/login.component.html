@@ -56,13 +56,15 @@
       </button>
     </form>
 
-    <div class="card-footer">
-      <p>
-        Hesabınız yok mu?
-        <a href="#" class="register-link" (click)="onRegisterClick(); $event.preventDefault()">Kayıt Ol</a>
-      </p>
-    </div>
-  </div>
+   <div class="card-footer">
+  <p>
+    Hesabınız yok mu?
+    <a href="#" class="register-link" (click)="onRegisterClick(); $event.preventDefault()">Kayıt Ol</a>
+  </p>
+  <p>
+    <a href="#" class="back-link" (click)="onBackToLanding(); $event.preventDefault()">← Ana Sayfaya Dön</a>
+  </p>
+</div>
 
   <div class="auth-footer">
     <div class="footer-content">
